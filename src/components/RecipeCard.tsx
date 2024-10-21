@@ -16,7 +16,7 @@ const RecipeCard = ({ recipe }: { recipe: any }) => {
   const calculateAverageRating = (ratings: number[]) => {
     if (ratings.length === 0) return 0;
     const total = ratings.reduce((acc, rating) => acc + rating, 0);
-    return (total / ratings.length); // Renvoie la moyenne
+    return total / ratings.length;
   };
 
   const averageRating = calculateAverageRating(recipe.ratings);
@@ -62,16 +62,16 @@ const RecipeCard = ({ recipe }: { recipe: any }) => {
           </div>
         </div>
         <div className="flex justify-center items-center px-6 py-4">
-        <StarRatings
-          rating={averageRating}
-          starRatedColor="#EAB308"
-          starEmptyColor="gray"
-          numberOfStars={5}
-          starDimension="20px"
-          starSpacing="3px"
-        />
+          <StarRatings
+            rating={averageRating}
+            starRatedColor="#EAB308"
+            starEmptyColor="gray"
+            numberOfStars={5}
+            starDimension="20px"
+            starSpacing="3px"
+          />
+        </div>
       </div>
-    </div>
     </div>
   );
 };
