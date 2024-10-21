@@ -2,4 +2,9 @@
 Recipe sharing app
 
 ## Start app
-To start app, execute the following command on a terminal :  `docker-compose up --build -d` and search for http://localhost:1003.
+To start the app, run the following command in a terminal:
+```bash
+docker-compose up --build -d
+```
+
+Once the application has started, open your browser and go to: http://localhost:1003.
