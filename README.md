@@ -1,2 +1,5 @@
 # share-my-recipe-back
-Application de partage de recettes
+Recipe sharing app
+
+## Start app
+To start app, execute the following command on a terminal :  `docker-compose up --build -d` and search for http://localhost:1003.
