@@ -15,7 +15,7 @@ const Form = () => {
   };
 
   return (
-    <div className="bg-primary-light w-1/3 p-5 flex flex-col gap-5">
+    <div className="bg-primary-light w-1/3 p-5 flex flex-col gap-5 rounded-lg">
       <h2 className="font-artifika text-3xl font-bold text-center mb-4 text-gray-800 relative">
         Connexion
         <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-yellow-500 rounded-full"></span>
