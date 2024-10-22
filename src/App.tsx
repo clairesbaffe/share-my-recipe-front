@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Recipe from "./pages/Recipe";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import UserProfile from "./pages/UserProfile";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function AppContent() {
           <Route path="/recipe/:id" element={<Recipe />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/profile" element={<UserProfile />} />
         </Routes>
       </main>
       <Footer />
