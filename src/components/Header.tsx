@@ -2,38 +2,38 @@ import React from "react";
 import { UserIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 
-const Header = () => {
+const Header = ({ showBottomPart = true }: { showBottomPart?: boolean }) => {
   return (
-    <header className="bg-primary text-white font-artifika">
-      <div className="container mx-auto">
-        <header className="flex justify-between items-center px-14 py-4">
-          <Link to="/">
-            <img
-              src="/logo/logo-no-background.png"
-              alt="Share My Recipe - Logo"
-              className="h-20"
-            />
-          </Link>
+    <header className="bg-primary text-white font-artifika container mx-auto">
+      <header className="flex justify-between items-center px-14 py-4">
+        <Link to="/">
+          <img
+            src="/logo/logo-no-background.png"
+            alt="Share My Recipe - Logo"
+            className="h-20"
+          />
+        </Link>
 
-          <div className="relative inline-block w-custom-xl h-10">
-            <input
-              type="text"
-              className="w-full h-full pr-10 border border-gray-300 rounded-md"
-            />
-            <span className="text-black absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-              <MagnifyingGlassIcon className="h-5" />
-            </span>
-          </div>
+        <div className="relative inline-block w-custom-xl h-10">
+          <input
+            type="text"
+            className="w-full h-full pr-10 border border-gray-300 rounded-md"
+          />
+          <span className="text-black absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+            <MagnifyingGlassIcon className="h-5" />
+          </span>
+        </div>
 
-          <Link to="/login">
-            <button className="bg-secondary px-5 py-3 flex items-center gap-2 rounded-3xl">
-              <UserIcon className="h-5" /> Se connecter
-            </button>
-          </Link>
+        <Link to="/login">
+          <button className="bg-secondary px-5 py-3 flex items-center gap-2 rounded-3xl">
+            <UserIcon className="h-5" /> Se connecter
+          </button>
+        </Link>
 
-          {/* <button>Profil</button> */}
-        </header>
+        {/* <button>Profil</button> */}
+      </header>
 
+      {showBottomPart && (
         <nav className="bg-primary-light text-black m-0 py-2">
           <ul className="flex items-center justify-evenly">
             <li>
@@ -63,7 +63,7 @@ const Header = () => {
             </li>
           </ul>
         </nav>
-      </div>
+      )}
     </header>
   );
 };
