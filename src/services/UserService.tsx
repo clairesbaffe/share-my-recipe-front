@@ -38,4 +38,16 @@ export const UserService = {
         });
         return response;
     },
+
+    changePassword: async (newPassword: string) => {
+        const response = await fetch("http://localhost:8080/api/v1/changepassword", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: 'include',
+            body: JSON.stringify({ newPassword }),
+        });
+        return response;
+    },
 };
