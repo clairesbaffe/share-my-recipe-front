@@ -1,5 +1,4 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import Form from "../components/LoginForm";
 
 const Login = () => {
   return (
@@ -8,12 +7,7 @@ const Login = () => {
         Connexion
         <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-yellow-500 rounded-full"></span>
       </h2>
-      <p>
-        Pas de compte ?{" "}
-        <Link to="/signup" className="text-blue-500 hover:underline">
-          S'inscrire
-        </Link>
-      </p>
+      <Form />
     </div>
   );
 };
