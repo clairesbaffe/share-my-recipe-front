@@ -1,6 +1,7 @@
 import { Timer, Utensils } from "lucide-react";
 import { UserIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
+import RateRecipeCard from "./RateRecipeCard";
 
 const RecipeContent = ({ recipe }: { recipe: any }) => {
   const recetteData = JSON.parse(recipe.recette);
@@ -72,31 +73,37 @@ const RecipeContent = ({ recipe }: { recipe: any }) => {
       </header>
 
       <div
-        className="m-16 p-4 grid grid-cols-4 gap-4"
+        className="flex flex-col justify-center items-center"
         style={{ marginTop: `${marginTopValue}px` }}
       >
-        <div className="col-span-1">
-          <h2 className="text-2xl font-bold text-center font-artifika relative mb-6">
-            Ingrédients
-            <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-yellow-500 rounded-full"></span>
-          </h2>
-          {recetteData.ingredients.map((ingredient: any, index: number) => (
-            <div className="flex flex-col" key={index}>
-              <p className="font-secondary">{ingredient}</p>
-            </div>
-          ))}
+        <div className="w-full grid grid-cols-4 gap-4 justify-items-center">
+          <div className="col-span-1">
+            <h2 className="text-2xl font-bold text-center font-artifika relative mb-6">
+              Ingrédients
+              <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-yellow-500 rounded-full"></span>
+            </h2>
+            {recetteData.ingredients.map((ingredient: any, index: number) => (
+              <div className="flex flex-col" key={index}>
+                <p className="font-secondary">{ingredient}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="col-span-3">
+            <h2 className="text-2xl font-bold text-center font-artifika relative mb-6">
+              Instructions
+              <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-yellow-500 rounded-full"></span>
+            </h2>
+            {recetteData.instructions.map((instruction: any, index: number) => (
+              <div className="flex flex-col" key={index}>
+                <p className="font-secondary">{instruction}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="col-span-3">
-          <h2 className="text-2xl font-bold text-center font-artifika relative mb-6">
-            Instructions
-            <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-yellow-500 rounded-full"></span>
-          </h2>
-          {recetteData.instructions.map((instruction: any, index: number) => (
-            <div className="flex flex-col" key={index}>
-              <p className="font-secondary">{instruction}</p>
-            </div>
-          ))}
+        <div className="m-4">
+          <RateRecipeCard recipeId={recipe.id} />
         </div>
       </div>
     </div>

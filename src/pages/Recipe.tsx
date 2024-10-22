@@ -3,6 +3,7 @@ import RecipeContent from "../components/RecipeContent";
 
 const Recipe = () => {
   const recipe = {
+    id: 1,
     title: "Soupe à l'oignon",
     image:
       "https://assets.afcdn.com/recipe/20181012/82641_w1024h1024c1cx2136cy1424cxt0cyt0cxb4272cyb2848.jpg",
