@@ -1,5 +1,5 @@
 import React from "react";
-import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa'; // Importez des icônes si besoin
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 
 const Footer = () => {
   return (
@@ -21,7 +21,7 @@ const Footer = () => {
         </div>
 
         <div className="flex flex-col items-center">
-          <img src="/logo/logo-white.png" alt="Logo du Site" className="h-24 mb-2" /> {/* Ajustez la taille du logo */}
+          <img src="/logo/logo-white.png" alt="Logo du Site" className="h-24 mb-2" />
           <p className="text-sm">&copy; {new Date().getFullYear()} Share My Recipe. Tous droits réservés.</p>
         </div>
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { UserIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -21,9 +22,12 @@ const Header = () => {
             </span>
           </div>
 
-          <button className="bg-secondary px-5 py-3 flex items-center gap-2 rounded-3xl">
-            <UserIcon className="h-5" /> Se connecter
-          </button>
+          <Link to="/login">
+            <button className="bg-secondary px-5 py-3 flex items-center gap-2 rounded-3xl">
+              <UserIcon className="h-5" /> Se connecter
+            </button>
+          </Link>
+
           {/* <button>Profil</button> */}
         </header>
 
