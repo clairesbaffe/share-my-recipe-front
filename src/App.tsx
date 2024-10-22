@@ -7,6 +7,7 @@ import Recipe from "./pages/Recipe";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import UserProfile from "./pages/UserProfile";
+import SpecialRecipes from "./pages/SpecialRecipes";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function AppContent() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/profile" element={<UserProfile />} />
+          <Route path="/special/:slug" element={<SpecialRecipes />} />
         </Routes>
       </main>
       <Footer />
