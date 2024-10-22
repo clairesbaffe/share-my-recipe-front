@@ -6,7 +6,7 @@ export const UserService = {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ username, password }),
-            credentials: 'include'
+            credentials: 'include',
         });
         return response;
     },
@@ -18,7 +18,23 @@ export const UserService = {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ username, password }),
-            credentials: 'include'
+            credentials: 'include',
+        });
+        return response;
+    },
+
+    logout: async () => {
+        const response = await fetch("http://localhost:8080/api/v1/logout", {
+            method: "POST",
+            credentials: 'include',
+        });
+        return response;
+    },
+
+    me: async () => {
+        const response = await fetch("http://localhost:8080/api/v1/me", {
+            method: "GET",
+            credentials: 'include',
         });
         return response;
     },

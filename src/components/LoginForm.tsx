@@ -1,17 +1,20 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserService } from "../services/UserService";
+import { useAuth } from "../context/AuthContext";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { setIsAuthenticated } = useAuth();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
       const response = await UserService.login(username, password);
       if (response.status === 200) {
+        setIsAuthenticated(true);
         navigate("/");
       } else {
         alert("Échec de la connexion");
@@ -29,7 +32,9 @@ const LoginForm = () => {
         </h2>
         <form onSubmit={handleSubmit} className="flex flex-col gap-8">
           <div className="flex gap-3 items-center">
-            <label htmlFor="username" className="w-1/3">Nom d'utilisateur</label>
+            <label htmlFor="username" className="w-1/3">
+              Nom d'utilisateur
+            </label>
             <input
                 type="text"
                 name="username"
@@ -39,7 +44,9 @@ const LoginForm = () => {
             />
           </div>
           <div className="flex gap-3 items-center">
-            <label htmlFor="password" className="w-1/3">Mot de passe</label>
+            <label htmlFor="password" className="w-1/3">
+              Mot de passe
+            </label>
             <input
                 type="password"
                 name="password"
@@ -48,7 +55,10 @@ const LoginForm = () => {
                 required
             />
           </div>
-          <button type="submit" className="bg-primary font-artifika font-bold w-2/3 h-10 rounded-xl m-auto">
+          <button
+              type="submit"
+              className="bg-primary font-artifika font-bold w-2/3 h-10 rounded-xl m-auto"
+          >
             Me connecter
           </button>
         </form>
