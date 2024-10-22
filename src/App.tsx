@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import UserProfile from "./pages/UserProfile";
 import SpecialRecipes from "./pages/SpecialRecipes";
+import InMyFridge from "./pages/InMyFridge";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function AppContent() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/special/:slug" element={<SpecialRecipes />} />
+          <Route path="/dans-mon-frigo" element={<InMyFridge />} />
         </Routes>
       </main>
       <Footer />
