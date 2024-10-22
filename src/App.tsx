@@ -9,6 +9,7 @@ import SignUp from "./pages/SignUp";
 import UserProfile from "./pages/UserProfile";
 import SpecialRecipes from "./pages/SpecialRecipes";
 import InMyFridge from "./pages/InMyFridge";
+import SearchPage from "./pages/SearchPage";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function AppContent() {
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/special/:slug" element={<SpecialRecipes />} />
           <Route path="/dans-mon-frigo" element={<InMyFridge />} />
+          <Route path="/search" element={<SearchPage />} />
         </Routes>
       </main>
       <Footer />
