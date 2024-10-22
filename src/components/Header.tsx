@@ -7,11 +7,14 @@ const Header = () => {
     <header className="bg-primary text-white font-artifika">
       <div className="container mx-auto">
         <header className="flex justify-between items-center px-14 py-4">
-          <img
-            src="/logo/logo-no-background.png"
-            alt="Share My Recipe - Logo"
-            className="h-20"
-          />
+          <Link to="/">
+            <img
+              src="/logo/logo-no-background.png"
+              alt="Share My Recipe - Logo"
+              className="h-20"
+            />
+          </Link>
+
           <div className="relative inline-block w-custom-xl h-10">
             <input
               type="text"
