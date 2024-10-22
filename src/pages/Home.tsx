@@ -147,7 +147,6 @@ const Home = () => {
     },
 ];
 
-
 const handleCardClick = (recipeId: number) => {
   navigate(`/recipe/${recipeId}`);
 };

@@ -4,21 +4,19 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        artifika: ['Artifika', 'sans-serif'], // Ajouter la police 'Artifika'
+        artifika: ["Artifika", "sans-serif"],
+        secondary: ["Roboto", "sans-serif"],
       },
       colors: {
         primary: {
-          DEFAULT: '#e77816',
-          light: '#FFEAD8'
+          DEFAULT: "#e77816",
+          light: "#FFEAD8",
         },
-        secondary: '#120812',
-        white: {
-          DEFAULT: '#fbfbfa',
-        },
+        secondary: "#120812",
       },
       width: {
-        'custom-lg': '600px',
-        'custom-xl': '700px',
+        "custom-lg": "600px",
+        "custom-xl": "700px",
       },
     },
   },
