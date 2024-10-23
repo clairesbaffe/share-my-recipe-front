@@ -21,6 +21,7 @@ const Home = () => {
 
   const handleCardClick = (recipeId: number) => {
     navigate(`/recipe/${recipeId}`);
+    window.scrollTo(0, 0);
   };
 
   if (loading) {

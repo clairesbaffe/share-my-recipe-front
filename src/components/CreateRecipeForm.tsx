@@ -115,6 +115,7 @@ const CreateRecipeForm = () => {
       if (response.status === 201) {
         alert('Recette créée avec succès !');
         navigate("/"); // Redirection vers la page principale
+        window.scrollTo(0, 0);
       } else {
         alert('Erreur lors de la création de la recette.');
       }
