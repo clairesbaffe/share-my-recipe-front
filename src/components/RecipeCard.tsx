@@ -3,23 +3,18 @@ import { Timer, Utensils, CookingPot } from "lucide-react";
 import StarRatings from "react-star-ratings";
 
 const RecipeCard = ({ recipe }: { recipe: any }) => {
-  const hours = Math.floor(recipe.preparation_time / 60);
-  const minutes = recipe.preparation_time % 60;
-
   let preparationTime;
-  if (recipe.preparation_time >= 60) {
+  const totalMinutes = recipe.preparationTime;
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  
+  if (totalMinutes >= 60) {
     preparationTime = minutes === 0 ? `${hours} h` : `${hours} h ${minutes} mn`;
   } else {
-    preparationTime = `${recipe.preparation_time} mn`;
+    preparationTime = `${totalMinutes} mn`;
   }
 
-  const calculateAverageRating = (ratings: number[]) => {
-    if (ratings.length === 0) return 0;
-    const total = ratings.reduce((acc, rating) => acc + rating, 0);
-    return total / ratings.length;
-  };
-
-  const averageRating = calculateAverageRating(recipe.ratings);
+  const averageRating = recipe.rating;
 
   const imageId = Math.floor(Math.random() * 1000);
 
@@ -37,10 +32,12 @@ const RecipeCard = ({ recipe }: { recipe: any }) => {
           <div className="font-bold text-xl">{recipe.title}</div>
         </div>
         <div className="space-x-2">
-          <span className="inline-flex items-center bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
-            <Utensils className="h-5 mr-1" />
-            {recipe.nb_persons}
-          </span>
+          {recipe.nbPersons && (
+            <span className="inline-flex items-center bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
+              <Utensils className="h-5 mr-1" />
+              {recipe.nbPersons}
+            </span>
+          )}
           <span className="inline-flex items-center bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
             <Timer className="h-5 mr-1" />
             {preparationTime}
@@ -63,16 +60,18 @@ const RecipeCard = ({ recipe }: { recipe: any }) => {
             ))}
           </div>
         </div>
-        <div className="flex justify-center items-center px-6 py-4">
-          <StarRatings
-            rating={averageRating}
-            starRatedColor="#EAB308"
-            starEmptyColor="gray"
-            numberOfStars={5}
-            starDimension="20px"
-            starSpacing="3px"
-          />
-        </div>
+        {recipe.rating > 0 && (
+          <div className="flex justify-center items-center px-6 py-4">
+            <StarRatings
+              rating={averageRating}
+              starRatedColor="#EAB308"
+              starEmptyColor="gray"
+              numberOfStars={5}
+              starDimension="20px"
+              starSpacing="3px"
+            />
+          </div>
+        )}
       </div>
     </div>
   );
