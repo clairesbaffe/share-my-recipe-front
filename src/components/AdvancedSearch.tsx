@@ -27,6 +27,8 @@ type AdvancedSearchProps = {
   handleKeyPressTagsItems: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   handleDeleteTagsItems: (index: number) => void;
   setShowTagsItemsInputValue: (value: string) => void;
+  orderByRatings: boolean;
+  setOrderByRatings: (show: boolean) => void;
 };
 
 const Form = ({
@@ -52,9 +54,11 @@ const Form = ({
   handleKeyPressTagsItems,
   handleDeleteTagsItems,
   setShowTagsItemsInputValue,
+  orderByRatings,
+  setOrderByRatings,
 }: AdvancedSearchProps) => {
   return (
-    <div className="bg-primary-light flex flex-col gap-5 min-h-screen">
+    <div className="bg-primary-light flex flex-col gap-5 h-full">
       <h2 className="bg-primary-medium font-artifika text-center text-gray-800 px-12 py-1">
         Recherche avancée
       </h2>
@@ -170,9 +174,23 @@ const Form = ({
         </ul>
       </div>
 
+      <div>
+        <button
+          className={`font-artifika px-4 py-2 rounded-lg ${
+            orderByRatings
+              ? "bg-primary-medium shadow-inset"
+              : "bg-primary shadow-md"
+          }`}
+          onClick={() => setOrderByRatings(!orderByRatings)}
+        >
+          Trier par notes
+        </button>
+      </div>
+
+      <hr className="border-primary-medium m-2" />
       <button
         onClick={handleSearch}
-        className="bg-primary w-2/3 h-8 mx-auto rounded-lg font-artifika"
+        className="bg-primary text-lg w-2/3 h-8 mx-auto rounded-lg font-artifika"
       >
         Rechercher
       </button>

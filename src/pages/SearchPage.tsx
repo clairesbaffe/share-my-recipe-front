@@ -1,27 +1,46 @@
-import React, { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import AdvancedSearch from "../components/AdvancedSearch";
+import { getAllRecipes } from "../services/RecipeService";
+import LoadingComponent from "../components/LoadingComponent";
+import RecipeCard from "../components/RecipeCard";
 
 const SearchPage = () => {
+  const navigate = useNavigate();
+
+  const [recipes, setRecipes] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const [searchParams] = useSearchParams();
   const query = searchParams.get("query");
-  // fetch with query
+
+  useEffect(() => {
+    // fetch with query parameters
+    const fetchRecipes = async () => {
+      const fetchedRecipes = await getAllRecipes();
+      setRecipes(fetchedRecipes);
+      setLoading(false);
+    };
+
+    fetchRecipes();
+  }, []);
 
   const [excludedItems, setExcludedItems] = useState<string[]>([]);
   const [showExcludedItemsInput, setShowExcludedItemsInput] = useState(false);
   const [excludedItemsInputValue, setShowExcludedItemsInputValue] =
     useState("");
-    
-    const [minPrep, setMinPrep] = useState(0);
-    const [maxPrep, setMaxPrep] = useState(1440);
-    
-    const [difficulty, setDifficulty] = useState<number>(0);
-    const [hoverDifficulty, setHoverDifficulty] = useState<number | null>(null);
 
-    const [tagsItems, setTagsItems] = useState<string[]>([]);
-    const [showTagsItemsInput, setShowTagsItemsInput] = useState(false);
-    const [tagsItemsInputValue, setShowTagsItemsInputValue] =
-      useState("");
+  const [minPrep, setMinPrep] = useState(0);
+  const [maxPrep, setMaxPrep] = useState(1440);
+
+  const [difficulty, setDifficulty] = useState<number>(0);
+  const [hoverDifficulty, setHoverDifficulty] = useState<number | null>(null);
+
+  const [tagsItems, setTagsItems] = useState<string[]>([]);
+  const [showTagsItemsInput, setShowTagsItemsInput] = useState(false);
+  const [tagsItemsInputValue, setShowTagsItemsInputValue] = useState("");
+
+  const [orderByRatings, setOrderByRatings] = useState(false);
 
   const handleKeyPressExcludedItems = (
     e: React.KeyboardEvent<HTMLInputElement>
@@ -61,12 +80,23 @@ const SearchPage = () => {
   };
 
   const handleSearch = () => {
-    console.log('Recherche effectuée avec les paramètres :', {
+    console.log("Recherche effectuée avec les paramètres :", {
       excludedItems,
       difficulty,
-      tagsItems
+      tagsItems,
+      orderByRatings
     });
+    // fetch api with filters
   };
+
+  const handleCardClick = (recipeId: number) => {
+    navigate(`/recipe/${recipeId}`);
+    window.scrollTo(0, 0);
+  };
+
+  if (loading) {
+    return <LoadingComponent />;
+  }
 
   return (
     <div className="flex justify-between">
@@ -94,6 +124,8 @@ const SearchPage = () => {
           handleKeyPressTagsItems={handleKeyPressTagsItems}
           handleDeleteTagsItems={handleDeleteTagsItems}
           setShowTagsItemsInputValue={setShowTagsItemsInputValue}
+          orderByRatings={orderByRatings}
+          setOrderByRatings={setOrderByRatings}
         />
       </div>
 
@@ -101,6 +133,19 @@ const SearchPage = () => {
         <h2 className="font-artifika text-2xl my-4 text-gray-800">
           Résultats pour : {query}
         </h2>
+        {recipes && (
+          <div className="grid grid-cols-4 gap-8 m-12">
+            {recipes.map((recipe: any, index: number) => (
+              <div
+                className="flex flex-col h-full transition-transform transform hover:scale-105 shadow-lg border rounded-lg overflow-hidden hover:cursor-pointer"
+                key={index}
+                onClick={() => handleCardClick(recipe.id)}
+              >
+                <RecipeCard recipe={recipe} />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
