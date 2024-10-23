@@ -10,6 +10,7 @@ import UserProfile from "./pages/UserProfile";
 import SpecialRecipes from "./pages/SpecialRecipes";
 import InMyFridge from "./pages/InMyFridge";
 import SearchPage from "./pages/SearchPage";
+import CreateRecipe from "./pages/CreateRecipe";
 import { AuthProvider } from "./context/AuthContext";
 
 function App() {
@@ -40,6 +41,7 @@ function AppContent() {
                     <Route path="/special/:slug" element={<SpecialRecipes />} />
                     <Route path="/dans-mon-frigo" element={<InMyFridge />} />
                     <Route path="/search" element={<SearchPage />} />
+                    <Route path="/create-recipe" element={<CreateRecipe />} />
                 </Routes>
             </main>
             <Footer />
