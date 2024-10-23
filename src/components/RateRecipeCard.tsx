@@ -1,19 +1,17 @@
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext"
 
 const RateRecipeCard = ({recipeId}: {recipeId: number}) => {
   const [rating, setRating] = useState<number>(0);
   const [hover, setHover] = useState<number | null>(null);
-  const [isBlurred, setIsBlurred] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
-
-  // Si utilisateur connecté setIsBlurred(false);
-  // Si utilisateur a déjà noté, ne pas afficher
+  const { isAuthenticated } = useAuth();
 
   const handleSubmit = () => {
     if (rating === 0) {
-      setError('Veuillez sélectionner une note avant de soumettre.'); // Afficher une erreur
+      setError('Veuillez sélectionner une note avant de soumettre.');
     } else {
       setError(''); // Réinitialiser l'erreur si une note est sélectionnée
       console.log('Note soumise avec succès !');
@@ -25,7 +23,7 @@ const RateRecipeCard = ({recipeId}: {recipeId: number}) => {
     <div className="max-w-sm rounded-xl overflow-hidden shadow-lg bg-white px-10 py-6 font-artifika relative inline-block">
       Notez cette recette !
       <div className="mt-2 flex flex-col items-center">
-        {isBlurred && (
+        {!isAuthenticated && (
           <div
             style={{
               position: "absolute",
@@ -34,7 +32,7 @@ const RateRecipeCard = ({recipeId}: {recipeId: number}) => {
               width: "100%",
               height: "100%",
               backgroundColor: "rgba(255, 255, 255, 0.2)",
-              backdropFilter: "blur(1px)",
+              backdropFilter: "blur(1.5px)",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -42,8 +40,8 @@ const RateRecipeCard = ({recipeId}: {recipeId: number}) => {
               pointerEvents: "auto",
             }}
           >
-            <Link to="/login">
-              <p className="font-artifika cursor-pointer">Connectez-vous</p>
+            <Link to="/login" className="w-full h-full flex justify-center items-center">
+              <p className="font-artifika m-4 cursor-pointer">Connectez-vous pour noter cette recette</p>
             </Link>
           </div>
         )}
@@ -77,7 +75,7 @@ const RateRecipeCard = ({recipeId}: {recipeId: number}) => {
         {/* <p>Note: {rating} étoile(s)</p> */}
         {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
         <button
-          className="bg-secondary text-white px-5 py-2 rounded-3xl mt-3"
+          className="bg-secondary text-white px-5 py-2 rounded-3xl mt-5"
           onClick={handleSubmit}
         >
           Envoyer
