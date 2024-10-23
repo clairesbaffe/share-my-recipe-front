@@ -186,7 +186,7 @@ const CreateRecipeForm = () => {
               </div>
             </div>
 
-            <ul className="mt-4 flex">
+            <ul className="mt-4 flex flex-wrap">
               {ingredients.map((item: string, index: number) => (
                   <li key={index} className="flex items-center mt-2">
                 <span className="flex items-center bg-primary-medium text-black rounded-full px-3 py-1 mr-2">
@@ -355,7 +355,7 @@ const CreateRecipeForm = () => {
               </div>
             </div>
 
-            <ul className="mt-4">
+            <ul className="mt-4 flex flex-wrap">
               {tags.map((item: string, index: number) => (
                   <li
                       key={index}
