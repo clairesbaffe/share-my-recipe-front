@@ -1,26 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import RecipeContent from "../components/RecipeContent";
+import { useParams } from "react-router-dom";
+import { getRecipeById } from "../services/RecipeService";
 
 const Recipe = () => {
-  const recipe = {
-    title: "Soupe à l'oignon",
-    image: "https://example.com/image.jpg",
-    description: "Délicieuse soupe française.",
-    recette: {
-      ingredients: ["Oignons", "Bouillon", "Pain grillé"],
-      instructions: [
-        "Faire revenir les oignons.",
-        "Ajouter le bouillon et mijoter.",
-      ],
-    },
-    preparationTime: 1.2,
-    nbPersons: 2,
-    difficulty: 3.4,
-    tags: ["végé", "miam"],
-    ratings: 4.0,
-    authorId: 1,
-    date: "2024-10-22",
-  };
+  const { id } = useParams();
+  const [recipe, setRecipe] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      if(id){
+        const fetchedRecipes = await getRecipeById(id);
+        setRecipe(fetchedRecipes);
+        setLoading(false);
+      }
+    };
+
+    fetchRecipes();
+  }, [id]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return <RecipeContent recipe={recipe} />;
 };
