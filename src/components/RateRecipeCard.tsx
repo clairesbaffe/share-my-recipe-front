@@ -1,21 +1,29 @@
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext"
+import { useAuth } from "../context/AuthContext";
+import { patchUserRating } from "../services/RatingService";
 
-const RateRecipeCard = ({recipeId}: {recipeId: number}) => {
+const RateRecipeCard = ({ recipeId }: { recipeId: number }) => {
   const [rating, setRating] = useState<number>(0);
   const [hover, setHover] = useState<number | null>(null);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<string>("");
   const { isAuthenticated } = useAuth();
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (rating === 0) {
-      setError('Veuillez sélectionner une note avant de soumettre.');
+      setError("Veuillez sélectionner une note avant de soumettre.");
     } else {
-      setError(''); // Réinitialiser l'erreur si une note est sélectionnée
-      console.log('Note soumise avec succès !');
-      // Ajoute ici toute autre logique, comme l'envoi d'une requête API
+      setError("");
+      try {
+        const recipeData = {
+          rating,
+        };
+        await patchUserRating(recipeId, recipeData);
+        alert("Recette notée avec succès !");
+      } catch (err) {
+        alert("La publication de la note a échouée");
+      }
     }
   };
 
@@ -40,8 +48,13 @@ const RateRecipeCard = ({recipeId}: {recipeId: number}) => {
               pointerEvents: "auto",
             }}
           >
-            <Link to="/login" className="w-full h-full flex justify-center items-center">
-              <p className="font-artifika m-4 cursor-pointer">Connectez-vous pour noter cette recette</p>
+            <Link
+              to="/login"
+              className="w-full h-full flex justify-center items-center"
+            >
+              <p className="font-artifika m-4 cursor-pointer">
+                Connectez-vous pour noter cette recette
+              </p>
             </Link>
           </div>
         )}
