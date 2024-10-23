@@ -1,7 +1,7 @@
 import React from "react";
 import FridgeIngredients from "../components/FridgeIngredients";
 
-const Home = () => {
+const InMyFridge = () => {
   return (
     <div className="mt-5 flex flex-col items-center">
       <FridgeIngredients />
@@ -9,4 +9,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default InMyFridge;

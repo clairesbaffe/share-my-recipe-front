@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 import RateRecipeCard from "./RateRecipeCard";
 
 const RecipeContent = ({ recipe }: { recipe: any }) => {
-  const recetteData = JSON.parse(recipe.recette);
-
   const hours = Math.floor(recipe.preparationTime / 60);
   const minutes = recipe.preparationTime % 60;
 
@@ -48,7 +46,9 @@ const RecipeContent = ({ recipe }: { recipe: any }) => {
             <div className="grid grid-cols-5 gap-5">
               <span className="col-span-1 inline-flex items-center gap-1">
                 <UserIcon className="h-5 mr-1" />
-                <Link to="/profile">{recipe.author.name}</Link>
+                
+                {/* // TODO : Remplacer par username */}
+                <Link to="/profile">{recipe.authorId}</Link> 
               </span>
               {recipe.tags && (
                 <span className="col-span-4 flex flex-wrap space-x-2 space-y-1">
@@ -82,7 +82,7 @@ const RecipeContent = ({ recipe }: { recipe: any }) => {
               Ingrédients
               <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-yellow-500 rounded-full"></span>
             </h2>
-            {recetteData.ingredients.map((ingredient: any, index: number) => (
+            {recipe.recette.ingredients.map((ingredient: any, index: number) => (
               <div className="flex flex-col" key={index}>
                 <p className="font-secondary">{ingredient}</p>
               </div>
@@ -94,7 +94,7 @@ const RecipeContent = ({ recipe }: { recipe: any }) => {
               Instructions
               <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-yellow-500 rounded-full"></span>
             </h2>
-            {recetteData.instructions.map((instruction: any, index: number) => (
+            {recipe.recette.instructions.map((instruction: any, index: number) => (
               <div className="flex flex-col" key={index}>
                 <p className="font-secondary">{instruction}</p>
               </div>
