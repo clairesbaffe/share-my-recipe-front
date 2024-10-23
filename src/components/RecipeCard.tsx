@@ -21,12 +21,14 @@ const RecipeCard = ({ recipe }: { recipe: any }) => {
 
   const averageRating = calculateAverageRating(recipe.ratings);
 
+  const imageId = Math.floor(Math.random() * 1000);
+
   return (
     <div className="h-[450px] max-w-sm rounded overflow-hidden shadow-lg bg-white flex flex-col">
       <div className="flex justify-center items-center h-48">
         <img
-          className="h-full w-auto object-contain"
-          src="/logo/logo-color.png"
+          className="h-full w-full object-cover"
+          src={`https://picsum.photos/id/${imageId}/750/450`}
           alt="Nom de la Recette"
         />
       </div>

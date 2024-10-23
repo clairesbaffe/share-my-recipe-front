@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const CreateRecipeForm = () => {
   const navigate = useNavigate();
 
-  const [file, setFile] = useState("");
+  // const [file, setFile] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
@@ -32,10 +32,10 @@ const CreateRecipeForm = () => {
 
   const [errorMessage, setErrorMessage] = useState("");
 
-  function handleImageChange(e: any) {
-    console.log(e.target.files);
-    setFile(URL.createObjectURL(e.target.files[0]));
-  }
+  // function handleImageChange(e: any) {
+  //   console.log(e.target.files);
+  //   setFile(URL.createObjectURL(e.target.files[0]));
+  // }
 
   const handleKeyPressIngredients = (
     e: React.KeyboardEvent<HTMLInputElement>
@@ -114,7 +114,7 @@ const CreateRecipeForm = () => {
       preparationTime: totalMinutes,
       nbPersons,
       tags,
-      image: file,
+      image: '',
     };
 
     console.log(formData);
@@ -379,7 +379,7 @@ const CreateRecipeForm = () => {
         </div>
 
         {/* Image */}
-        <div className="flex flex-col items-center space-y-4">
+        {/* <div className="flex flex-col items-center space-y-4">
           <label htmlFor="image">Une petite image ?</label>
           <input
             type="file"
@@ -389,7 +389,7 @@ const CreateRecipeForm = () => {
             className="mt-2 p-2 cursor-pointer"
           />
           {file && <img src={file} alt={file} className="h-16" />}
-        </div>
+        </div> */}
 
         {/* Error message */}
         {errorMessage && (

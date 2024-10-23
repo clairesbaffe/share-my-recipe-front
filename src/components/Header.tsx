@@ -75,20 +75,18 @@ const Header = ({ showBottomPart = true }: { showBottomPart?: boolean }) => {
             >
               <UserIcon className="h-5" /> Déconnexion
             </button>
-          </div>
-        ) : (
-          <>
             <Link to="/create-recipe">
               <button className="bg-secondary px-5 py-3 flex items-center gap-2 rounded-3xl">
                 <IoCreate className="h-5" /> Ajouter une recette
               </button>
             </Link>
-            <Link to="/login">
-              <button className="bg-secondary px-5 py-3 flex items-center gap-2 rounded-3xl">
-                <UserIcon className="h-5" /> Se connecter
-              </button>
-            </Link>
-          </>
+          </div>
+        ) : (
+          <Link to="/login">
+            <button className="bg-secondary px-5 py-3 flex items-center gap-2 rounded-3xl">
+              <UserIcon className="h-5" /> Se connecter
+            </button>
+          </Link>
         )}
       </header>
 
