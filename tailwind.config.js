@@ -19,6 +19,9 @@ module.exports = {
         "custom-lg": "600px",
         "custom-xl": "700px",
       },
+      animation: {
+        'smooth-spin': 'spin 1.5s linear infinite',
+      },
     },
   },
   plugins: [],

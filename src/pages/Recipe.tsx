@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import RecipeContent from "../components/RecipeContent";
 import { useParams } from "react-router-dom";
 import { getRecipeById } from "../services/RecipeService";
+import LoadingComponent from "../components/LoadingComponent";
 
 const Recipe = () => {
   const { id } = useParams();
@@ -21,7 +22,7 @@ const Recipe = () => {
   }, [id]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingComponent />;
   }
 
   return <RecipeContent recipe={recipe} />;

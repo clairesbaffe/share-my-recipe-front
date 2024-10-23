@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import RecipeCard from "../components/RecipeCard";
 import { useNavigate } from "react-router-dom";
 import { getAllRecipes } from "../services/RecipeService";
+import LoadingComponent from "../components/LoadingComponent";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const Home = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingComponent />;
   }
 
   return (
