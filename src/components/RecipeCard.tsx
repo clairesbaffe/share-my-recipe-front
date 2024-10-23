@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Timer, Utensils, CookingPot } from "lucide-react";
 import StarRatings from "react-star-ratings";
 
@@ -16,7 +16,7 @@ const RecipeCard = ({ recipe }: { recipe: any }) => {
 
   const averageRating = recipe.rating;
 
-  const imageId = Math.floor(Math.random() * 1000);
+  const imageId = useMemo(() => Math.floor(Math.random() * 1000), []);
 
   return (
     <div className="h-[450px] max-w-sm rounded overflow-hidden shadow-lg bg-white flex flex-col">
@@ -24,7 +24,7 @@ const RecipeCard = ({ recipe }: { recipe: any }) => {
         <img
           className="h-full w-full object-cover"
           src={`https://picsum.photos/id/${imageId}/750/450`}
-          alt="Nom de la Recette"
+          alt={recipe.title}
         />
       </div>
       <div className="flex flex-col gap-0">
