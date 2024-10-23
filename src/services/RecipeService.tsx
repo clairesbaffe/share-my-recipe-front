@@ -40,7 +40,7 @@ export const getRecipeById = async (recipeId: string) => {
 
 export const getLastestRecipes = async () => {
     const response = await fetch(
-        `http://localhost:8080/api/v1/public/recipes/ordered?order=desc`,
+        `http://localhost:8080/api/v1/public/recipes/ordered?order=desc&sortedBy=dates`,
         {
             method: "GET",
             credentials: "include",
