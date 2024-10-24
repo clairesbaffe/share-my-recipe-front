@@ -24,6 +24,7 @@ const Header = ({ showBottomPart = true }: { showBottomPart?: boolean }) => {
   const handleKeyDown = (event: any) => {
     if (event.key === "Enter") {
       navigate(`/search?query=${encodeURIComponent(searchTerm)}`);
+      setSearchTerm("");
     }
   };
 

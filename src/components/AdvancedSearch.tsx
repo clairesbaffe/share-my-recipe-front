@@ -1,5 +1,4 @@
 import { X } from "lucide-react";
-// import MultiRangeSlider from "./MultiRangeSlider";
 import { GiCookingPot } from "react-icons/gi";
 
 type AdvancedSearchProps = {
