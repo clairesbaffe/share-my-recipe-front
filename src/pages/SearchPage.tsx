@@ -4,6 +4,7 @@ import AdvancedSearch from "../components/AdvancedSearch";
 import { getAllRecipes } from "../services/RecipeService";
 import LoadingComponent from "../components/LoadingComponent";
 import RecipeCard from "../components/RecipeCard";
+import Pagination from "../components/Pagination";
 
 const SearchPage = () => {
   const navigate = useNavigate();
@@ -11,19 +12,57 @@ const SearchPage = () => {
   const [recipes, setRecipes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(true);
+
   const [searchParams] = useSearchParams();
   const query = searchParams.get("query");
 
   useEffect(() => {
-    // fetch with query parameters
     const fetchRecipes = async () => {
-      const fetchedRecipes = await getAllRecipes();
-      setRecipes(fetchedRecipes);
+      setLoading(true);
+      const fetchedRecipes = await getAllRecipes(1);
+
+      if (fetchedRecipes.length === 0) {
+        setHasNextPage(false);
+      } else if (fetchedRecipes.length === 20) {
+        setHasNextPage(true);
+        setRecipes(fetchedRecipes);
+      } else {
+        setHasNextPage(false);
+        setRecipes(fetchedRecipes);
+      }
+
       setLoading(false);
     };
 
     fetchRecipes();
   }, []);
+
+  const handlePageChange = async (pageNumber: number) => {
+    if (pageNumber >= 1) {
+      if (pageNumber === currentPage) return;
+
+      const fetchedRecipes = await getAllRecipes(pageNumber);
+
+      if (fetchedRecipes.length > 0) {
+        setRecipes(fetchedRecipes);
+        const url = new URL(window.location.href);
+        url.searchParams.set("page", pageNumber.toString());
+        window.history.pushState({}, "", url.toString());
+        window.scrollTo(0, 0);
+        setCurrentPage(pageNumber);
+        if (fetchedRecipes.length === 20) {
+          setHasNextPage(true);
+        }
+      } else {
+        setHasNextPage(false);
+        if (currentPage === pageNumber) {
+          setCurrentPage(1);
+        }
+      }
+    }
+  };
 
   const [excludedItems, setExcludedItems] = useState<string[]>([]);
   const [showExcludedItemsInput, setShowExcludedItemsInput] = useState(false);
@@ -84,7 +123,7 @@ const SearchPage = () => {
       excludedItems,
       difficulty,
       tagsItems,
-      orderByRatings
+      orderByRatings,
     });
     // fetch api with filters
   };
@@ -146,6 +185,12 @@ const SearchPage = () => {
             ))}
           </div>
         )}
+        {/* pagination */}
+        <Pagination
+          currentPage={currentPage}
+          hasNextPage={hasNextPage}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   );
