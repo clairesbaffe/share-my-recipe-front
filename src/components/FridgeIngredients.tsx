@@ -1,15 +1,15 @@
 import { useState } from "react";
 
-const Form = () => {
+const Form = ({
+  chips,
+  setChips,
+  handleSubmit,
+}: {
+  chips: any;
+  setChips: (value: string[]) => void;
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+}) => {
   const [inputValue, setInputValue] = useState("");
-  const [chips, setChips] = useState<string[]>([]);
-
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    const chipsString = chips.join(", ");
-    // appel API avec chipsString
-  };
 
   const handleInputChange = (e: any) => {
     setInputValue(e.target.value);
@@ -28,7 +28,7 @@ const Form = () => {
   };
 
   const removeChip = (chipToRemove: any) => {
-    setChips(chips.filter((chip) => chip !== chipToRemove));
+    setChips(chips.filter((chip: any) => chip !== chipToRemove));
   };
 
   return (
@@ -43,7 +43,7 @@ const Form = () => {
       <form onSubmit={handleSubmit} className="flex flex-col gap-8">
         <div className="flex flex-col gap-4">
           <div className="flex flex-wrap gap-2">
-            {chips.map((chip, index) => (
+            {chips.map((chip: any, index: number) => (
               <div
                 key={index}
                 className="flex items-center bg-gray-200 px-2 py-1 rounded-full"
