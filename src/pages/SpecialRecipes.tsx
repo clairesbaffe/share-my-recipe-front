@@ -13,13 +13,13 @@ const formatSlug = (slug: string) => {
 
 const getKeywordFromSlug = (slug: string) => {
   switch (slug) {
-    case "dernieres-recettes":
+    case "dernières-recettes":
       return "nouveau";
-    case "recettes-vegetariennes":
+    case "recettes-végétariennes":
       return "végétarien";
-    case "recettes-veganes":
+    case "recettes-véganes":
       return "vegan";
-    case "special-halloween":
+    case "spécial-halloween":
       return "halloween";
     default:
       return "";
