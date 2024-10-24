@@ -1,30 +1,30 @@
 export const UserService = {
     register: async (username: string, password: string) => {
-        const response = await fetch("http://localhost:8080/api/v1/register", {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ username, password }),
+            body: JSON.stringify({username, password}),
             credentials: 'include',
         });
         return response;
     },
 
     login: async (username: string, password: string) => {
-        const response = await fetch("http://localhost:8080/api/v1/login", {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ username, password }),
+            body: JSON.stringify({username, password}),
             credentials: 'include',
         });
         return response;
     },
 
     logout: async () => {
-        const response = await fetch("http://localhost:8080/api/v1/logout", {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/logout`, {
             method: "POST",
             credentials: 'include',
         });
@@ -32,7 +32,7 @@ export const UserService = {
     },
 
     me: async () => {
-        const response = await fetch("http://localhost:8080/api/v1/me", {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/me`, {
             method: "GET",
             credentials: 'include',
         });
@@ -40,13 +40,13 @@ export const UserService = {
     },
 
     changePassword: async (newPassword: string) => {
-        const response = await fetch("http://localhost:8080/api/v1/changepassword", {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/changepassword`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             credentials: 'include',
-            body: JSON.stringify({ newPassword }),
+            body: JSON.stringify({newPassword}),
         });
         return response;
     },
