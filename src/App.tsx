@@ -42,6 +42,7 @@ function AppContent() {
                     <Route path="/dans-mon-frigo" element={<InMyFridge />} />
                     <Route path="/search" element={<SearchPage />} />
                     <Route path="/create-recipe" element={<CreateRecipe />} />
+                    <Route path="/profile/:id" element={<UserProfile />} />
                 </Routes>
             </main>
             <Footer />
