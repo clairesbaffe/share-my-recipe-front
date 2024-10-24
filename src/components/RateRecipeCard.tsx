@@ -54,12 +54,8 @@ const RateRecipeCard = ({ recipeId }: { recipeId: number }) => {
 
   const handleDeleteRating = async () => {
     if (userRated) {
-      const response = await UserService.me();
-      const data = await response.json();
-      const userId = data.user.id;
-
       try {
-        const response = await deleteRating(userId, recipeId);
+        const response = await deleteRating(recipeId);
 
         if (response.status === 201) {
           alert("Note supprimée avec succès !");

@@ -25,9 +25,9 @@ export const getRatesForUserAndRecipe = async (userId: number, recipeId: number)
   return response.json();
 }
 
-export const deleteRating = async (userId: number, recipeId: number) => {
+export const deleteRating = async (recipeId: number) => {
   const response = await fetch(
-    `http://localhost:8080/api/v1/ratings/${recipeId}/${userId}`,
+    `http://localhost:8080/api/v1/ratings/${recipeId}`,
     {
       method: "DELETE",
       credentials: "include",
