@@ -76,7 +76,7 @@ const RecipeContent = ({
                 <span className="flex items-center">
                   <UserIcon className="h-5 mr-1" />
                   {/* // TODO : Remplacer par username */}
-                  <Link to="/profile">{recipe.authorId}</Link>
+                  <Link to={`/profile/${recipe.authorId}`}>{recipe.authorName}</Link>
                 </span>
               </span>
 
