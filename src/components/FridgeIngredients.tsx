@@ -4,10 +4,12 @@ const Form = ({
   chips,
   setChips,
   handleSubmit,
+  errorMessage,
 }: {
   chips: any;
   setChips: (value: string[]) => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  errorMessage: string;
 }) => {
   const [inputValue, setInputValue] = useState("");
 
@@ -75,6 +77,10 @@ const Form = ({
         >
           Lancer la recherche
         </button>
+        {/* Error message */}
+        {errorMessage && (
+          <p className="text-red-500 text-center">{errorMessage}</p>
+        )}
       </form>
     </div>
   );

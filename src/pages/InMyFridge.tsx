@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import FridgeIngredients from "../components/FridgeIngredients";
-import { getAllRecipes } from "../services/RecipeService";
+import { getRecipeByIngredients } from "../services/RecipeService";
 import { useNavigate } from "react-router-dom";
 import RecipeCard from "../components/RecipeCard";
 import Pagination from "../components/Pagination";
@@ -11,6 +11,8 @@ const InMyFridge = () => {
 
   const [recipes, setRecipes] = useState<any[] | null>(null);
   const [chips, setChips] = useState<string[]>([]);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [searchMessage, setSearchMessage] = useState("");
 
   const [loading, setLoading] = useState(false);
 
@@ -21,7 +23,12 @@ const InMyFridge = () => {
     if (pageNumber >= 1) {
       if (pageNumber === currentPage) return;
 
-      const fetchedRecipes = await getAllRecipes(pageNumber);
+      const chipsString = chips.join(",");
+
+      const fetchedRecipes = await getRecipeByIngredients(
+        chipsString,
+        pageNumber
+      );
 
       if (fetchedRecipes.length > 0) {
         setRecipes(fetchedRecipes);
@@ -46,18 +53,30 @@ const InMyFridge = () => {
     e.preventDefault();
 
     const fetchRecipes = async () => {
+      console.log(chips.length);
+
+      if (chips.length === 0) {
+        setErrorMessage("Appuyez sur Entrée pour ajouter un ingrédient");
+        return;
+      }
       setLoading(true);
-      // fetch with chips (ingredients)
-      const fetchedRecipes = await getAllRecipes(1);
+      const chipsString = chips.join(",");
+
+      const fetchedRecipes = await getRecipeByIngredients(chipsString, 1);
+      setErrorMessage("");
 
       if (fetchedRecipes.length === 0) {
         setHasNextPage(false);
+        setRecipes([]);
+        setSearchMessage("Aucune recette trouvée pour ces ingrédients");
       } else if (fetchedRecipes.length === 20) {
         setHasNextPage(true);
         setRecipes(fetchedRecipes);
+        setSearchMessage("");
       } else {
         setHasNextPage(false);
         setRecipes(fetchedRecipes);
+        setSearchMessage("");
       }
 
       setLoading(false);
@@ -72,13 +91,20 @@ const InMyFridge = () => {
   };
 
   return (
-    <div className="mt-5 flex flex-col items-center">
+    <div className="my-5 flex flex-col items-center">
       <FridgeIngredients
         chips={chips}
         setChips={setChips}
         handleSubmit={handleSubmit}
+        errorMessage={errorMessage}
       />
       {loading && <LoadingComponent />}
+      {searchMessage && (
+        <p className="text-gray-800 text-center font-medium mt-4 bg-gray-100 border border-gray-300 p-4 rounded">
+          {searchMessage}
+        </p>
+      )}
+
       {recipes && (
         <div>
           <div className="flex w-full items-center mt-8">
