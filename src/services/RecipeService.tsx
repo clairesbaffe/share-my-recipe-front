@@ -11,8 +11,8 @@ export const createRecipe = async (recipeData: any) => {
   return response;
 };
 
-export const getAllRecipes = async () => {
-  const response = await fetch("http://localhost:8080/api/v1/public/recipes", {
+export const getAllRecipes = async (currentPage: number) => {
+  const response = await fetch(`http://localhost:8080/api/v1/public/recipes?page=${currentPage}`, {
     method: "GET",
     credentials: "include",
     headers: {
@@ -25,7 +25,7 @@ export const getAllRecipes = async () => {
 
 export const getRecipeById = async (recipeId: string) => {
   const response = await fetch(
-    `http://localhost:8080/api/v1/recipes/${recipeId}`,
+    `http://localhost:8080/api/v1/public/recipes/${recipeId}`,
     {
       method: "GET",
       credentials: "include",
@@ -38,9 +38,9 @@ export const getRecipeById = async (recipeId: string) => {
   return response.json();
 };
 
-export const getLastestRecipes = async () => {
+export const getLastestRecipes = async (currentPage: number) => {
     const response = await fetch(
-        `http://localhost:8080/api/v1/public/recipes/ordered?order=desc&sortedBy=dates`,
+        `http://localhost:8080/api/v1/public/recipes/ordered?order=desc&sortedBy=dates&page=${currentPage}`,
         {
             method: "GET",
             credentials: "include",
