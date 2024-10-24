@@ -13,6 +13,7 @@ const RateRecipeCard = ({ recipeId }: { recipeId: number }) => {
   const [rating, setRating] = useState<number>(0);
   const [hover, setHover] = useState<number | null>(null);
   const [error, setError] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
   const { isAuthenticated } = useAuth();
   const [userRated, setUserRated] = useState(false);
 
@@ -35,38 +36,43 @@ const RateRecipeCard = ({ recipeId }: { recipeId: number }) => {
   }, [recipeId]);
 
   const handleSubmit = async () => {
+    setMessage("");
+    setError("");
     if (rating === 0) {
       setError("Veuillez sélectionner une note avant de soumettre.");
     } else {
-      setError("");
       try {
         const recipeData = {
           rating,
         };
         await patchUserRating(recipeId, recipeData);
-        alert("Recette notée avec succès !");
+        setMessage("Note enregistrée avec succès!");
         setUserRated(true);
       } catch (err) {
-        alert("La publication de la note a échouée");
+        setError("La publication de la note a échoué");
       }
     }
   };
 
   const handleDeleteRating = async () => {
     if (userRated) {
+      setMessage("");
+      setError("");
       try {
         const response = await deleteRating(recipeId);
 
         if (response.status === 201) {
-          alert("Note supprimée avec succès !");
+          setMessage("Note supprimée avec succès !");
           setRating(0);
           setUserRated(false);
         } else {
-          alert("Erreur lors de la suppression de la note.");
+          setError("Erreur lors de la suppression de la note.");
         }
       } catch (error) {
         console.error("Erreur lors de la suppression de la note:", error);
-        alert("Une erreur s'est produite lors de la suppression de la note.");
+        setError(
+          "Une erreur s'est produite lors de la suppression de la note."
+        );
       }
     }
   };
@@ -129,6 +135,8 @@ const RateRecipeCard = ({ recipeId }: { recipeId: number }) => {
             );
           })}
         </div>
+        {message && <p className="text-xs mt-3">{message}</p>}
+        {error && <p className="text-red-500 text-xs mt-3">{error}</p>}
         {userRated && (
           <button
             className="bg-red-500 text-white py-2 px-4 rounded-3xl mt-5 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
@@ -138,8 +146,6 @@ const RateRecipeCard = ({ recipeId }: { recipeId: number }) => {
           </button>
         )}
 
-        {/* <p>Note: {rating} étoile(s)</p> */}
-        {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
         <button
           className="bg-secondary text-white px-5 py-2 rounded-3xl mt-5"
           onClick={handleSubmit}
