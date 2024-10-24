@@ -122,3 +122,17 @@ export const getRecipesByUserId = async (
 
   return response.json();
 };
+
+export const getRecipeByIngredients = async (ingredients: string, currentPage: number) => {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/public/recipes/search/ingredients?ingredients=${ingredients}&limit=20&page=${currentPage}`,
+      {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.json();
+}
