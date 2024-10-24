@@ -3,6 +3,7 @@ import RecipeCard from "../components/RecipeCard";
 import { useNavigate, useParams } from "react-router-dom";
 import { getLastestRecipes } from "../services/RecipeService";
 import Pagination from "../components/Pagination";
+import LoadingComponent from "../components/LoadingComponent";
 
 const formatSlug = (slug: string) => {
   return slug
@@ -93,7 +94,7 @@ const Home = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingComponent/>;
   }
 
   return (
