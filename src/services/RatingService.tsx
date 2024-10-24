@@ -1,6 +1,6 @@
 export const patchUserRating = async (recipeId: number, recipeData: {rating: number}) => {
   const response = await fetch(
-    `http://localhost:8086/api/v1/ratings/${recipeId}`,
+    `http://localhost:8080/api/v1/ratings/${recipeId}`,
     {
       method: "PATCH",
       credentials: "include",
@@ -12,3 +12,26 @@ export const patchUserRating = async (recipeId: number, recipeData: {rating: num
   );
   return response;
 };
+
+
+export const getRatesForUserAndRecipe = async (userId: number, recipeId: number) =>{
+  const response = await fetch(
+    `http://localhost:8080/api/v1/ratings/${recipeId}/${userId}`,
+    {
+      method: "GET",
+      credentials: "include",
+    }
+  );
+  return response.json();
+}
+
+export const deleteRating = async (userId: number, recipeId: number) => {
+  const response = await fetch(
+    `http://localhost:8080/api/v1/ratings/${recipeId}/${userId}`,
+    {
+      method: "DELETE",
+      credentials: "include",
+    }
+  );
+  return response;
+}
