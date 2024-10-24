@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from "react";
-import {useNavigate, useSearchParams} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import AdvancedSearch from "../components/AdvancedSearch";
-import {searchRecipes} from "../services/RecipeService";
+import { searchRecipes, searchRecipesWithFilters } from "../services/RecipeService";
 import LoadingComponent from "../components/LoadingComponent";
 import RecipeCard from "../components/RecipeCard";
 import Pagination from "../components/Pagination";
@@ -10,63 +10,17 @@ const SearchPage = () => {
     const navigate = useNavigate();
 
     const [recipes, setRecipes] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const [currentPage, setCurrentPage] = useState(1);
     const [hasNextPage, setHasNextPage] = useState(true);
 
     const [searchParams] = useSearchParams();
-    const query = searchParams.get("query");
-
-    useEffect(() => {
-        const fetchRecipes = async () => {
-            if (!query) return;
-
-            setLoading(true);
-            const fetchedRecipes = await searchRecipes(query, currentPage);
-
-            if (fetchedRecipes.length === 0) {
-                setHasNextPage(false);
-            } else if (fetchedRecipes.length === 20) {
-                setHasNextPage(true);
-                setRecipes(fetchedRecipes);
-            } else {
-                setHasNextPage(false);
-                setRecipes(fetchedRecipes);
-            }
-
-            setLoading(false);
-        };
-
-        fetchRecipes();
-    }, [query, currentPage]);
-
-    const handlePageChange = async (pageNumber: number) => {
-        if (pageNumber >= 1 && pageNumber !== currentPage) {
-            const fetchedRecipes = await searchRecipes(query!, pageNumber);
-
-            if (fetchedRecipes.length > 0) {
-                setRecipes(fetchedRecipes);
-                const url = new URL(window.location.href);
-                url.searchParams.set("page", pageNumber.toString());
-                window.history.pushState({}, "", url.toString());
-                window.scrollTo(0, 0);
-                setCurrentPage(pageNumber);
-                if (fetchedRecipes.length === 20) {
-                    setHasNextPage(true);
-                } else {
-                    setHasNextPage(false);
-                }
-            } else {
-                setHasNextPage(false);
-            }
-        }
-    };
+    const query = searchParams.get("query") || "";
 
     const [excludedItems, setExcludedItems] = useState<string[]>([]);
     const [showExcludedItemsInput, setShowExcludedItemsInput] = useState(false);
-    const [excludedItemsInputValue, setShowExcludedItemsInputValue] =
-        useState("");
+    const [excludedItemsInputValue, setShowExcludedItemsInputValue] = useState("");
 
     const [minPrep, setMinPrep] = useState(0);
     const [maxPrep, setMaxPrep] = useState(1440);
@@ -80,9 +34,76 @@ const SearchPage = () => {
 
     const [orderByRatings, setOrderByRatings] = useState(false);
 
-    const handleKeyPressExcludedItems = (
-        e: React.KeyboardEvent<HTMLInputElement>
-    ) => {
+    const [filtersApplied, setFiltersApplied] = useState(false);
+
+    const isFilteredSearch = () => {
+        return excludedItems.length > 0 || tagsItems.length > 0 || difficulty > 0 || minPrep !== 0 || maxPrep !== 1440;
+    };
+
+    const fetchRecipes = async () => {
+        setLoading(true);
+        let fetchedRecipes;
+
+        if (isFilteredSearch()) {
+            try {
+                fetchedRecipes = await searchRecipesWithFilters(
+                    query,
+                    currentPage,
+                    20,
+                    "desc",
+                    orderByRatings ? "ratings" : "dates",
+                    [],
+                    [minPrep, maxPrep],
+                    excludedItems,
+                    difficulty,
+                    tagsItems
+                );
+            } catch (error) {
+                console.error("Erreur lors de la récupération des recettes avec filtres :", error);
+                setLoading(false);
+                return;
+            }
+        } else {
+            try {
+                fetchedRecipes = await searchRecipes(query, currentPage);
+            } catch (error) {
+                console.error("Erreur lors de la recherche des recettes :", error);
+                setLoading(false);
+                return;
+            }
+        }
+
+        if (fetchedRecipes.length === 0) {
+            setHasNextPage(false);
+        } else if (fetchedRecipes.length === 20) {
+            setHasNextPage(true);
+            setRecipes(fetchedRecipes);
+        } else {
+            setHasNextPage(false);
+            setRecipes(fetchedRecipes);
+        }
+
+        setLoading(false);
+    };
+
+    const handleSearchClick = () => {
+        setCurrentPage(1);
+        fetchRecipes();
+    };
+
+    useEffect(() => {
+        if (filtersApplied || query) {
+            fetchRecipes();
+        }
+    }, [currentPage]);
+
+    const handlePageChange = async (pageNumber: number) => {
+        if (pageNumber >= 1 && pageNumber !== currentPage) {
+            setCurrentPage(pageNumber);
+        }
+    };
+
+    const handleKeyPressExcludedItems = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter" && excludedItemsInputValue.trim() !== "") {
             setExcludedItems([...excludedItems, excludedItemsInputValue]);
             setShowExcludedItemsInputValue("");
@@ -95,9 +116,7 @@ const SearchPage = () => {
         setExcludedItems(newItems);
     };
 
-    const handleKeyPressTagsItems = (
-        e: React.KeyboardEvent<HTMLInputElement>
-    ) => {
+    const handleKeyPressTagsItems = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter" && tagsItemsInputValue.trim() !== "") {
             setTagsItems([...tagsItems, tagsItemsInputValue]);
             setShowTagsItemsInputValue("");
@@ -111,20 +130,12 @@ const SearchPage = () => {
     };
 
     const handlePrepChange = (min: number, max: number) => {
-        const minValue = Math.min(min, maxPrep - 1);
-        setMinPrep(minValue);
-        const maxValue = Math.max(max, minPrep + 1);
-        setMaxPrep(maxValue);
+        setMinPrep(Math.min(min, maxPrep - 1));
+        setMaxPrep(Math.max(max, minPrep + 1));
     };
 
-    const handleSearch = () => {
-        console.log("Recherche effectuée avec les paramètres :", {
-            excludedItems,
-            difficulty,
-            tagsItems,
-            orderByRatings,
-        });
-        // fetch api with filters
+    const handleFiltersChange = () => {
+        setFiltersApplied(true);
     };
 
     const handleCardClick = (recipeId: number) => {
@@ -133,7 +144,7 @@ const SearchPage = () => {
     };
 
     if (loading) {
-        return <LoadingComponent/>;
+        return <LoadingComponent />;
     }
 
     return (
@@ -154,7 +165,6 @@ const SearchPage = () => {
                     hoverDifficulty={hoverDifficulty}
                     setDifficulty={setDifficulty}
                     setHoverDifficulty={setHoverDifficulty}
-                    handleSearch={handleSearch}
                     tagsItems={tagsItems}
                     showTagsItemsInput={showTagsItemsInput}
                     tagsItemsInputValue={tagsItemsInputValue}
@@ -164,7 +174,14 @@ const SearchPage = () => {
                     setShowTagsItemsInputValue={setShowTagsItemsInputValue}
                     orderByRatings={orderByRatings}
                     setOrderByRatings={setOrderByRatings}
+                    handleSearch={handleSearchClick}
                 />
+                <button
+                    className="btn btn-primary mt-4"
+                    onClick={handleSearchClick}
+                >
+                    Rechercher
+                </button>
             </div>
 
             <div className="flex-grow text-center relative">
@@ -179,7 +196,7 @@ const SearchPage = () => {
                                 key={index}
                                 onClick={() => handleCardClick(recipe.id)}
                             >
-                                <RecipeCard recipe={recipe}/>
+                                <RecipeCard recipe={recipe} />
                             </div>
                         ))}
                     </div>

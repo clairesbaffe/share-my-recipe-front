@@ -98,3 +98,56 @@ export const searchRecipes = async (query: string, currentPage: number) => {
 
     return response.json();
 };
+
+export const searchRecipesWithFilters = async (
+    query: string,
+    page: number,
+    limit: number,
+    order: string,
+    sortBy: string,
+    nbPersons: number[],
+    preparationTime: number[],
+    exclusions: string[],
+    difficulty: number,
+    tags: string[]
+) => {
+    const url = new URL(`${process.env.REACT_APP_API_URL}/public/recipes/search/filters`);
+
+    url.searchParams.append("query", query);
+    url.searchParams.append("page", page.toString());
+    url.searchParams.append("limit", limit.toString());
+    url.searchParams.append("order", order);
+    url.searchParams.append("sortBy", sortBy);
+
+    if (nbPersons.length > 0) {
+        url.searchParams.append("nbPersons", nbPersons.join(","));
+    }
+
+    if (preparationTime.length === 2) {
+        url.searchParams.append("preparationTime", preparationTime.join(","));
+    }
+
+    if (exclusions.length > 0) {
+        url.searchParams.append("exclusions", exclusions.join(","));
+    }
+
+    url.searchParams.append("difficulty", difficulty.toString());
+
+    if (tags.length > 0) {
+        url.searchParams.append("tags", tags.join(","));
+    }
+
+    const response = await fetch(url.toString(), {
+        method: "GET",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch recipes: ${response.statusText}`);
+    }
+
+    return response.json();
+};
