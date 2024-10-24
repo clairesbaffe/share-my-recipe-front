@@ -3,21 +3,64 @@ import RecipeCard from "../components/RecipeCard";
 import { useNavigate } from "react-router-dom";
 import { getAllRecipes } from "../services/RecipeService";
 import LoadingComponent from "../components/LoadingComponent";
+import Pagination from "../components/Pagination";
 
 const Home = () => {
   const navigate = useNavigate();
   const [recipes, setRecipes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(true);
+  
   useEffect(() => {
     const fetchRecipes = async () => {
-      const fetchedRecipes = await getAllRecipes();
-      setRecipes(fetchedRecipes);
+      setLoading(true);
+      const fetchedRecipes = await getAllRecipes(1);
+
+      if (fetchedRecipes.length === 0) {
+        setHasNextPage(false);
+      } else if (fetchedRecipes.length === 20) {
+        setHasNextPage(true);
+        setRecipes(fetchedRecipes);
+      } else {
+        setHasNextPage(false);
+        setRecipes(fetchedRecipes);
+      }
+  
       setLoading(false);
     };
-
+  
     fetchRecipes();
   }, []);
+
+  const handlePageChange = async (pageNumber: number) => {
+    if (pageNumber >= 1) {
+      if (pageNumber === currentPage) return;
+
+      const fetchedRecipes = await getAllRecipes(pageNumber);
+  
+      if (fetchedRecipes.length > 0) {
+        setRecipes(fetchedRecipes);
+        const url = new URL(window.location.href);
+        url.searchParams.set("page", pageNumber.toString());
+        window.history.pushState({}, "", url.toString());
+        window.scrollTo(0, 0);
+        setCurrentPage(pageNumber);
+        if(fetchedRecipes.length === 20) {
+          setHasNextPage(true);
+        }
+      } else {
+        setHasNextPage(false);
+        if (currentPage === pageNumber) {
+          setCurrentPage(1);
+        }
+      }
+    }
+  };
+  
+  
+  
 
   const handleCardClick = (recipeId: number) => {
     navigate(`/recipe/${recipeId}`);
@@ -47,6 +90,12 @@ const Home = () => {
           ))}
         </div>
       )}
+      {/* pagination */}
+      <Pagination
+        currentPage={currentPage}
+        hasNextPage={hasNextPage}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };
