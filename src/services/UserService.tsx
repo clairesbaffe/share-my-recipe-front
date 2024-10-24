@@ -50,4 +50,12 @@ export const UserService = {
         });
         return response;
     },
+
+    getUserById: async (userId: string) => {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/public/users/${userId}`, {
+            method: "GET",
+            credentials: 'include',
+        });
+        return response;
+    }
 };

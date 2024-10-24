@@ -7,6 +7,7 @@ const UserProfile = () => {
   const [userData, setUserData] = useState<any>(null);
   const [newPassword, setNewPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [isConnectedUser, setIsConnectedUser] = useState(false);
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -17,6 +18,7 @@ const UserProfile = () => {
         const response = await UserService.me();
         const data = await response.json();
         setUserData(data);
+        setIsConnectedUser(true);
       } catch (err) {
         console.error(
           "Erreur lors de la récupération des informations utilisateur :",
@@ -26,8 +28,22 @@ const UserProfile = () => {
       }
     };
 
+    const fetchUserProfileById = async (id: string) => {
+      try {
+        const response = await UserService.getUserById(id);
+        const data = await response.json();
+        setUserData(data);
+      } catch (err) {
+        console.error(
+          "Erreur lors de la récupération des informations de l'utilisateur :",
+          err
+        );
+        setError("Impossible de récupérer les informations de l'utilisateur.");
+      }
+    };
+
     if (id) {
-      // get user by id + display readonly
+      fetchUserProfileById(id);
     } else {
       fetchUserProfile();
     }
@@ -56,7 +72,7 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="mt-5">
+    <div className="my-5">
       <h2 className="font-artifika text-3xl font-bold text-center mb-8 text-gray-800 relative">
         Profil
         <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-yellow-500 rounded-full"></span>
@@ -71,34 +87,45 @@ const UserProfile = () => {
             alt="Avatar"
             className="rounded-full w-32 h-32 mb-5"
           />
-          <div className="bg-primary-light p-5 rounded-lg w-1/3">
-            <h3 className="font-artifika text-xl font-bold text-center mb-4 text-gray-800">
-              {userData.username}
-            </h3>
-            <p className="text-center mb-2">
-              Date de création :{" "}
-              {new Date(userData.createdAt).toLocaleDateString()}
-            </p>
-          </div>
+          {isConnectedUser && (
+            <div className="bg-primary-light p-5 rounded-lg w-1/3">
+              <h3 className="font-artifika text-xl font-bold text-center mb-4 text-gray-800">
+                {userData.user.username}
+              </h3>
+            </div>
+          )}
+          {!isConnectedUser && (
+            <div className="bg-primary-light p-5 rounded-lg w-1/3">
+              <h3 className="font-artifika text-xl font-bold text-center mb-4 text-gray-800">
+                {userData.username}
+              </h3>
+              <p className="font-artifika text-center mb-2">
+                Date de création du profil :{" "}
+                {new Date(userData.creationDate).toLocaleDateString()}
+              </p>
+            </div>
+          )}
 
-          <div className="bg-primary-light p-5 rounded-lg w-1/3 mt-5">
-            <h3 className="font-artifika text-xl font-bold text-center mb-4 text-gray-800">
-              Changer le mot de passe
-            </h3>
-            <input
-              type="password"
-              placeholder="Nouveau mot de passe"
-              className="w-full p-3 mb-4 border border-gray-300 rounded-md"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-            <button
-              onClick={handlePasswordChange}
-              className="bg-secondary px-5 py-3 w-full text-white font-bold rounded-3xl"
-            >
-              Changer le mot de passe
-            </button>
-          </div>
+          {isConnectedUser && (
+            <div className="bg-primary-light p-5 rounded-lg w-1/3 mt-5">
+              <h3 className="font-artifika text-xl font-bold text-center mb-4 text-gray-800">
+                Changer le mot de passe
+              </h3>
+              <input
+                type="password"
+                placeholder="Nouveau mot de passe"
+                className="w-full p-3 mb-4 border border-gray-300 rounded-md"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+              <button
+                onClick={handlePasswordChange}
+                className="bg-secondary px-5 py-3 w-full text-white font-bold rounded-3xl"
+              >
+                Changer le mot de passe
+              </button>
+            </div>
+          )}
         </div>
       ) : (
         <p className="text-center">Chargement des informations du profil...</p>
