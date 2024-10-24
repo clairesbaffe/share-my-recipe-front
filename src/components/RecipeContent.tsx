@@ -1,9 +1,18 @@
 import { Timer, Utensils } from "lucide-react";
 import { UserIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import RateRecipeCard from "./RateRecipeCard";
+import { deleteRecipeByUserSession } from "../services/RecipeService";
 
-const RecipeContent = ({ recipe }: { recipe: any }) => {
+const RecipeContent = ({
+  recipe,
+  isAuthor,
+}: {
+  recipe: any;
+  isAuthor: boolean;
+}) => {
+  const navigate = useNavigate();
+
   const hours = Math.floor(recipe.preparationTime / 60);
   const minutes = recipe.preparationTime % 60;
 
@@ -17,8 +26,19 @@ const RecipeContent = ({ recipe }: { recipe: any }) => {
   // Ajust header card position according to tags number
   const tagCount = recipe.tags.length;
   const multiplier = Math.max(2, Math.floor(tagCount / 10) + 1);
-  const bottomValue = tagCount <= 10 ? 180 : 250 + tagCount * multiplier;
+  const bottomValue = tagCount <= 10 ? tagCount === 0 ? 60 : 180 : 250 + tagCount * multiplier;
   const marginTopValue = bottomValue + 16;
+
+  const handleRecipeDelete = async () => {
+    try {
+      await deleteRecipeByUserSession(recipe.id);
+      alert("Recette supprimée avec succès");
+      navigate("/");
+      window.scrollTo(0, 0);
+    } catch (error) {
+      alert("La suppression de la recette a échoué");
+    }
+  };
 
   return (
     <div>
@@ -42,14 +62,24 @@ const RecipeContent = ({ recipe }: { recipe: any }) => {
                   {recipe.nbPersons} personnes
                 </span>
               )}
+              {isAuthor && (
+                <button
+                  className="px-4 py-2 bg-red-500 text-white text-sm rounded-3xl shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75 transition duration-300 ease-in-out"
+                  onClick={handleRecipeDelete}
+                >
+                  Supprimer ma recette
+                </button>
+              )}
             </div>
             <div className="grid grid-cols-5 gap-5">
-              <span className="col-span-1 inline-flex items-center gap-1">
-                <UserIcon className="h-5 mr-1" />
-                
-                {/* // TODO : Remplacer par username */}
-                <Link to="/profile">{recipe.authorId}</Link> 
+              <span className="col-span-1 inline-flex flex-col items-start gap-1">
+                <span className="flex items-center">
+                  <UserIcon className="h-5 mr-1" />
+                  {/* // TODO : Remplacer par username */}
+                  <Link to="/profile">{recipe.authorId}</Link>
+                </span>
               </span>
+
               {recipe.tags && (
                 <span className="col-span-4 flex flex-wrap space-x-2 space-y-1">
                   {recipe.tags.map((tag: any, index: number) => (
@@ -82,11 +112,13 @@ const RecipeContent = ({ recipe }: { recipe: any }) => {
               Ingrédients
               <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-yellow-500 rounded-full"></span>
             </h2>
-            {recipe.recette.ingredients.map((ingredient: any, index: number) => (
-              <div className="flex flex-col" key={index}>
-                <p className="font-secondary">{ingredient}</p>
-              </div>
-            ))}
+            {recipe.recette.ingredients.map(
+              (ingredient: any, index: number) => (
+                <div className="flex flex-col" key={index}>
+                  <p className="font-secondary">{ingredient}</p>
+                </div>
+              )
+            )}
           </div>
 
           <div className="col-span-3">
@@ -94,11 +126,13 @@ const RecipeContent = ({ recipe }: { recipe: any }) => {
               Instructions
               <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-yellow-500 rounded-full"></span>
             </h2>
-            {recipe.recette.instructions.map((instruction: any, index: number) => (
-              <div className="flex flex-col" key={index}>
-                <p className="font-secondary">{instruction}</p>
-              </div>
-            ))}
+            {recipe.recette.instructions.map(
+              (instruction: any, index: number) => (
+                <div className="flex flex-col" key={index}>
+                  <p className="font-secondary">{instruction}</p>
+                </div>
+              )
+            )}
           </div>
         </div>
 
