@@ -83,3 +83,18 @@ export const deleteRecipeByUserSession = async (recipeId: number) => {
     );
     return response.json();
 }
+
+export const searchRecipes = async (query: string, currentPage: number) => {
+    const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/public/recipes/search?query=${encodeURIComponent(query)}&page=${currentPage}`,
+        {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }
+    );
+
+    return response.json();
+};
