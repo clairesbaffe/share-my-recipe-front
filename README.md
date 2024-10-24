@@ -7,6 +7,7 @@ Before starting, create a `.env` file in the root of the project with the follow
 
 ```bash
 REACT_APP_API_URL=<YOUR_API_URL>
+# For example : REACT_APP_API_URL="http://localhost:8080/api/v1"
 ```
 
 To start the app, run the following command in a terminal:
