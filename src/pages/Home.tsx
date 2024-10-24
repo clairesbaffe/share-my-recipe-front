@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from "react";
 import RecipeCard from "../components/RecipeCard";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { getAllRecipes } from "../services/RecipeService";
 import LoadingComponent from "../components/LoadingComponent";
 import Pagination from "../components/Pagination";
 
 const Home = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [recipes, setRecipes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(true);
-  
+
+  const [message, setMessage] = useState("");
+
   useEffect(() => {
     const fetchRecipes = async () => {
       setLoading(true);
@@ -27,19 +31,24 @@ const Home = () => {
         setHasNextPage(false);
         setRecipes(fetchedRecipes);
       }
-  
+
       setLoading(false);
     };
-  
+
+    if (location.state && location.state.message) {
+      setMessage(location.state.message);
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+
     fetchRecipes();
-  }, []);
+  }, [location.state, location.pathname, navigate]);
 
   const handlePageChange = async (pageNumber: number) => {
     if (pageNumber >= 1) {
       if (pageNumber === currentPage) return;
 
       const fetchedRecipes = await getAllRecipes(pageNumber);
-  
+
       if (fetchedRecipes.length > 0) {
         setRecipes(fetchedRecipes);
         const url = new URL(window.location.href);
@@ -47,7 +56,7 @@ const Home = () => {
         window.history.pushState({}, "", url.toString());
         window.scrollTo(0, 0);
         setCurrentPage(pageNumber);
-        if(fetchedRecipes.length === 20) {
+        if (fetchedRecipes.length === 20) {
           setHasNextPage(true);
         }
       } else {
@@ -58,9 +67,6 @@ const Home = () => {
       }
     }
   };
-  
-  
-  
 
   const handleCardClick = (recipeId: number) => {
     navigate(`/recipe/${recipeId}`);
@@ -73,6 +79,14 @@ const Home = () => {
 
   return (
     <div className="mt-5">
+      {message && (
+        <div
+          className={`font-artifika p-4 mb-4 text-sm text-green-700 bg-green-100 border border-green-400`}
+        >
+          {message}
+        </div>
+      )}
+
       <h2 className="font-artifika text-3xl font-bold text-center mb-8 text-gray-800 relative">
         Recettes du moment
         <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-yellow-500 rounded-full"></span>
