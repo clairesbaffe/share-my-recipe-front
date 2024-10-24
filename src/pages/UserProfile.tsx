@@ -2,12 +2,26 @@ import React, { useEffect, useState } from "react";
 import { UserService } from "../services/UserService";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, useParams } from "react-router-dom";
+import {
+  getRecipesByUserId,
+  getRecipesByUserSession,
+} from "../services/RecipeService";
+import RecipeCard from "../components/RecipeCard";
+import Pagination from "../components/Pagination";
+import LoadingComponent from "../components/LoadingComponent";
 
 const UserProfile = () => {
   const [userData, setUserData] = useState<any>(null);
   const [newPassword, setNewPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isConnectedUser, setIsConnectedUser] = useState(false);
+
+  const [recipes, setRecipes] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(true);
+
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -42,10 +56,46 @@ const UserProfile = () => {
       }
     };
 
+    const fetchRecipesByUserId = async (userId: string) => {
+      setLoading(true);
+      const fetchedRecipes = await getRecipesByUserId(userId, 1);
+
+      if (fetchedRecipes.length === 0) {
+        setHasNextPage(false);
+      } else if (fetchedRecipes.length === 20) {
+        setHasNextPage(true);
+        setRecipes(fetchedRecipes);
+      } else {
+        setHasNextPage(false);
+        setRecipes(fetchedRecipes);
+      }
+
+      setLoading(false);
+    };
+
+    const fetchRecipesByUserSession = async () => {
+      setLoading(true);
+      const fetchedRecipes = await getRecipesByUserSession(1);
+
+      if (fetchedRecipes.length === 0) {
+        setHasNextPage(false);
+      } else if (fetchedRecipes.length === 20) {
+        setHasNextPage(true);
+        setRecipes(fetchedRecipes);
+      } else {
+        setHasNextPage(false);
+        setRecipes(fetchedRecipes);
+      }
+
+      setLoading(false);
+    };
+
     if (id) {
       fetchUserProfileById(id);
+      fetchRecipesByUserId(id);
     } else {
       fetchUserProfile();
+      fetchRecipesByUserSession();
     }
   }, [id]);
 
@@ -64,6 +114,41 @@ const UserProfile = () => {
     } catch (err) {
       setError("Erreur lors du changement de mot de passe.");
     }
+  };
+
+  const handlePageChange = async (pageNumber: number) => {
+    if (pageNumber >= 1) {
+      if (pageNumber === currentPage) return;
+      let fetchedRecipes: any = [];
+
+      if (id) {
+        await getRecipesByUserId(id, pageNumber);
+      } else {
+        await getRecipesByUserSession(pageNumber);
+      }
+
+      if (fetchedRecipes.length > 0) {
+        setRecipes(fetchedRecipes);
+        const url = new URL(window.location.href);
+        url.searchParams.set("page", pageNumber.toString());
+        window.history.pushState({}, "", url.toString());
+        window.scrollTo(0, 0);
+        setCurrentPage(pageNumber);
+        if (fetchedRecipes.length === 20) {
+          setHasNextPage(true);
+        }
+      } else {
+        setHasNextPage(false);
+        if (currentPage === pageNumber) {
+          setCurrentPage(1);
+        }
+      }
+    }
+  };
+
+  const handleCardClick = (recipeId: number) => {
+    navigate(`/recipe/${recipeId}`);
+    window.scrollTo(0, 0);
   };
 
   if (!isAuthenticated) {
@@ -87,14 +172,13 @@ const UserProfile = () => {
             alt="Avatar"
             className="rounded-full w-32 h-32 mb-5"
           />
-          {isConnectedUser && (
+          {isConnectedUser ? (
             <div className="bg-primary-light p-5 rounded-lg w-1/3">
               <h3 className="font-artifika text-xl font-bold text-center mb-4 text-gray-800">
                 {userData.user.username}
               </h3>
             </div>
-          )}
-          {!isConnectedUser && (
+          ) : (
             <div className="bg-primary-light p-5 rounded-lg w-1/3">
               <h3 className="font-artifika text-xl font-bold text-center mb-4 text-gray-800">
                 {userData.username}
@@ -124,6 +208,41 @@ const UserProfile = () => {
               >
                 Changer le mot de passe
               </button>
+            </div>
+          )}
+          {loading && <LoadingComponent />}
+          {recipes && (
+            <div>
+              <div className="flex w-full items-center mt-8">
+                <hr className="border-primary m-4 w-full" />
+                {isConnectedUser ? (
+                  <p className="text-primary font-artifika min-w-max">
+                    Recettes que vous avez publiées
+                  </p>
+                ) : (
+                  <p className="text-primary font-artifika min-w-max">
+                    Recettes publiées par {userData.username}
+                  </p>
+                )}
+                <hr className="border-primary m-4 w-full" />
+              </div>
+              <div className="grid grid-cols-4 gap-8 m-12">
+                {recipes.map((recipe: any, index: number) => (
+                  <div
+                    className="flex flex-col h-full transition-transform transform hover:scale-105 shadow-lg border rounded-lg overflow-hidden hover:cursor-pointer"
+                    key={index}
+                    onClick={() => handleCardClick(recipe.id)}
+                  >
+                    <RecipeCard recipe={recipe} />
+                  </div>
+                ))}
+              </div>
+              {/* pagination */}
+              <Pagination
+                currentPage={currentPage}
+                hasNextPage={hasNextPage}
+                onPageChange={handlePageChange}
+              />
             </div>
           )}
         </div>
