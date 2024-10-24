@@ -3,6 +3,7 @@ import { UserIcon } from "@heroicons/react/24/outline";
 import { Link, useNavigate } from "react-router-dom";
 import RateRecipeCard from "./RateRecipeCard";
 import { deleteRecipeByUserSession } from "../services/RecipeService";
+import { useState } from "react";
 
 const RecipeContent = ({
   recipe,
@@ -12,6 +13,8 @@ const RecipeContent = ({
   isAuthor: boolean;
 }) => {
   const navigate = useNavigate();
+
+  const [errorMessage, setErrorMessage] = useState("");
 
   const hours = Math.floor(recipe.preparationTime / 60);
   const minutes = recipe.preparationTime % 60;
@@ -26,17 +29,19 @@ const RecipeContent = ({
   // Ajust header card position according to tags number
   const tagCount = recipe.tags.length;
   const multiplier = Math.max(2, Math.floor(tagCount / 10) + 1);
-  const bottomValue = tagCount <= 10 ? tagCount === 0 ? 60 : 180 : 250 + tagCount * multiplier;
+  const bottomValue =
+    tagCount <= 10 ? (tagCount === 0 ? 60 : 180) : 250 + tagCount * multiplier;
   const marginTopValue = bottomValue + 16;
 
   const handleRecipeDelete = async () => {
     try {
       await deleteRecipeByUserSession(recipe.id);
-      alert("Recette supprimée avec succès");
-      navigate("/");
+      navigate("/", {
+        state: { message: "Recette supprimée avec succès !" },
+      });
       window.scrollTo(0, 0);
     } catch (error) {
-      alert("La suppression de la recette a échoué");
+      setErrorMessage("La suppression de la recette a échoué");
     }
   };
 
@@ -63,12 +68,14 @@ const RecipeContent = ({
                 </span>
               )}
               {isAuthor && (
-                <button
-                  className="px-4 py-2 bg-red-500 text-white text-sm rounded-3xl shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75 transition duration-300 ease-in-out"
-                  onClick={handleRecipeDelete}
-                >
-                  Supprimer ma recette
-                </button>
+                <div>
+                  <button
+                    className="px-4 py-2 bg-red-500 text-white text-sm rounded-3xl shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75 transition duration-300 ease-in-out"
+                    onClick={handleRecipeDelete}
+                  >
+                    Supprimer ma recette
+                  </button>
+                </div>
               )}
             </div>
             <div className="grid grid-cols-5 gap-5">
@@ -76,7 +83,9 @@ const RecipeContent = ({
                 <span className="flex items-center">
                   <UserIcon className="h-5 mr-1" />
                   {/* // TODO : Remplacer par username */}
-                  <Link to={`/profile/${recipe.authorId}`}>{recipe.authorName}</Link>
+                  <Link to={`/profile/${recipe.authorId}`}>
+                    {recipe.authorName}
+                  </Link>
                 </span>
               </span>
 
@@ -94,6 +103,11 @@ const RecipeContent = ({
               )}
             </div>
           </div>
+          {errorMessage && (
+            <p className="text-red-500 text-center text-sm mt-2">
+              {errorMessage}
+            </p>
+          )}
           {recipe.description && (
             <p className="text-sm italic w-3/5 bg-primary-light border-l-4 border-primary-dark shadow-lg p-6 rounded-lg mx-auto my-4">
               "{recipe.description}"
