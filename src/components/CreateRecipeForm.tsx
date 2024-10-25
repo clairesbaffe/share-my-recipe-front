@@ -36,6 +36,7 @@ const CreateRecipeForm = () => {
   const minutesInputRef = useRef(null);
   const personsInputRef = useRef(null);
 
+  // prevent changing input number value on scroll
   useEffect(() => {
     const hoursInput: any = hoursInputRef.current;
     const minutesInput: any = hoursInputRef.current;
@@ -73,6 +74,7 @@ const CreateRecipeForm = () => {
     };
   }, []);
 
+  // manage ingredients, intructions and tags input
   const handleKeyPressIngredients = (
     e: React.KeyboardEvent<HTMLInputElement>
   ) => {
@@ -116,6 +118,7 @@ const CreateRecipeForm = () => {
     setTags(newItems);
   };
 
+  // manage publish button click
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
@@ -151,7 +154,7 @@ const CreateRecipeForm = () => {
       preparationTime: totalMinutes,
       nbPersons,
       tags,
-      image: "https://example.com/image.jpg", // ou le champ image si tu le gères
+      image: "https://example.com/image.jpg",
     };
 
     try {
