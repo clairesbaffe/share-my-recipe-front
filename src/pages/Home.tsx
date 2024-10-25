@@ -87,7 +87,45 @@ const Home = () => {
         </div>
       )}
 
-      <h2 className="font-artifika text-3xl font-bold text-center mb-8 text-gray-800 relative">
+      <h1 className="font-artifika text-3xl font-bold text-center mb-8 text-gray-800 relative">
+        Bienvenue sur Share My Recipe
+        <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-yellow-500 rounded-full"></span>
+      </h1>
+      <p className="mb-8 mx-20 flex flex-col gap-3">
+        <p>
+          Vous cherchez des idées de repas simples et savoureuses ? Vous êtes au
+          bon endroit ! Share My Recipe est une communauté chaleureuse dédiée
+          à tous les passionnés de cuisine, qu'ils soient débutants ou chefs en
+          herbe.
+        </p>
+        <p>
+          Ici, vous pouvez explorer une multitude de recettes partagées par
+          d'autres utilisateurs, toutes conçues pour répondre aux besoins des
+          cuisiniers de tous les jours. Que vous ayez quelques ingrédients dans
+          votre frigo ou que vous soyez en quête d'inspiration pour un repas
+          spécial, notre moteur de recherche intuitif vous permet de filtrer les
+          recettes par ingrédients, types de plats et plus encore.
+        </p>
+        <p>
+          Vous pouvez également faire briller votre créativité en publiant vos
+          propres recettes. Ajoutez des tags pour faciliter la découverte de vos
+          plats et partagez votre savoir-faire avec notre communauté. Et
+          n'oubliez pas de noter les recettes que vous essayez, de 1 à 5
+          étoiles, pour aider les autres à choisir les meilleures !
+        </p>
+        <p>
+          Rejoignez-nous pour partager votre passion pour la cuisine, découvrir
+          de nouvelles saveurs, et surtout, pour profiter d'un moment convivial
+          autour de bons plats.
+        </p>
+
+        <strong>
+          Cuisiner, partager, déguster : ensemble, faisons de chaque repas un
+          moment spécial !
+        </strong>
+      </p>
+
+      <h2 className="font-artifika text-2xl font-bold text-center mb-8 text-gray-800 relative">
         Recettes du moment
         <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-yellow-500 rounded-full"></span>
       </h2>
