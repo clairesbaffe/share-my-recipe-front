@@ -21,7 +21,7 @@ const RateRecipeCard = ({ recipeId }: { recipeId: number }) => {
     const fetchUserRating = async () => {
       const response = await UserService.me();
       const data = await response.json();
-      const userId = data.user.id;
+      const userId = data.id;
 
       if (userId && recipeId) {
         const ratings = await getRatesForUserAndRecipe(userId, recipeId);
