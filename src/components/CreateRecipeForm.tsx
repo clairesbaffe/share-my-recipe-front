@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GiCookingPot } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
 import { createRecipe } from "../services/RecipeService";
@@ -31,6 +31,44 @@ const CreateRecipeForm = () => {
   const [nbPersons, setNbPersons] = useState(0);
 
   const [errorMessage, setErrorMessage] = useState("");
+
+  const hoursInputRef = useRef(null);
+  const minutesInputRef = useRef(null);
+  const personsInputRef = useRef(null);
+
+  useEffect(() => {
+    const hoursInput: any = hoursInputRef.current;
+    const minutesInput: any = hoursInputRef.current;
+    const personsInput: any = hoursInputRef.current;
+
+    const handleHoursWheel = (e: any) => {
+      if (document.activeElement === hoursInput) {
+        e.preventDefault();
+      }
+    };
+    hoursInput.addEventListener('wheel', handleHoursWheel, { passive: false });
+
+    const handleMinutesWheel = (e: any) => {
+      if (document.activeElement === minutesInput) {
+        e.preventDefault();
+      }
+    };
+    minutesInput.addEventListener('wheel', handleMinutesWheel, { passive: false });
+
+    const handlePersonsWheel = (e: any) => {
+      if (document.activeElement === personsInput) {
+        e.preventDefault();
+      }
+    };
+    personsInput.addEventListener('wheel', handlePersonsWheel, { passive: false });
+
+
+    return () => {
+      hoursInput.removeEventListener('wheel', handleHoursWheel);
+      minutesInput.removeEventListener('wheel', handleMinutesWheel);
+      personsInput.removeEventListener('wheel', handlePersonsWheel);
+    };
+  }, []);
 
   const handleKeyPressIngredients = (
     e: React.KeyboardEvent<HTMLInputElement>
@@ -296,6 +334,7 @@ const CreateRecipeForm = () => {
           <label>En combien de temps ?</label>
           <div className="flex items-center gap-3">
             <input
+              ref={hoursInputRef}
               type="number"
               value={hours}
               onChange={(e) =>
@@ -303,12 +342,14 @@ const CreateRecipeForm = () => {
                   Number(e.target.value) >= 0 ? Number(e.target.value) : 0
                 )
               }
+              onWheel={(e) => e.preventDefault()}
               min={0}
               placeholder="Heures"
               className="w-16 h-10 p-2"
             />
             h
             <input
+            ref={minutesInputRef}
               type="number"
               value={minutes}
               onChange={(e) =>
@@ -331,6 +372,7 @@ const CreateRecipeForm = () => {
         <div className="flex flex-col items-center gap-3">
           <label htmlFor="nbPersons">Pour combien de personnes ?</label>
           <input
+          ref={personsInputRef}
             type="number"
             name="nbPersons"
             min={1}
