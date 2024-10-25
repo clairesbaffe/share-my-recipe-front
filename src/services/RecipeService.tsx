@@ -208,3 +208,17 @@ export const getRecipeByIdByUserSession = async (recipeId: string) => {
   );
   return response.json();
 };
+
+export const getRecipesByAnyTags = async (tags: string[], currentPage: number) => {
+  const response = await fetch(
+    `${process.env.REACT_APP_API_URL}/public/recipes/search/tags?tags=${tags.join(",")}&any=true&limit=20&page=${currentPage}`,
+    {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return response.json();
+}
