@@ -11,15 +11,12 @@ const CreateRecipeForm = () => {
   const [description, setDescription] = useState("");
 
   const [ingredients, setIngredients] = useState<string[]>([]);
-  const [showIngredientsInput, setShowIngredientsInput] = useState(true);
   const [ingredientsInputValue, setShowIngredientsInputValue] = useState("");
 
   const [instructions, setInstructions] = useState<string[]>([]);
-  const [showInstructionsInput, setShowInstructionsInput] = useState(true);
   const [instructionsInputValue, setShowInstructionsInputValue] = useState("");
 
   const [tags, setTags] = useState<string[]>([]);
-  const [showTagsInput, setShowTagsInput] = useState(true);
   const [tagsInputValue, setShowTagsInputValue] = useState("");
 
   const [difficulty, setDifficulty] = useState(1);
@@ -79,9 +76,9 @@ const CreateRecipeForm = () => {
     e: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (e.key === "Enter" && ingredientsInputValue.trim() !== "") {
+      e.preventDefault();
       setIngredients([...ingredients, ingredientsInputValue]);
       setShowIngredientsInputValue("");
-      setShowIngredientsInput(false);
     }
   };
 
@@ -94,9 +91,9 @@ const CreateRecipeForm = () => {
     e: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (e.key === "Enter" && instructionsInputValue.trim() !== "") {
+      e.preventDefault();
       setInstructions([...instructions, instructionsInputValue]);
       setShowInstructionsInputValue("");
-      setShowInstructionsInput(false);
     }
   };
 
@@ -107,9 +104,9 @@ const CreateRecipeForm = () => {
 
   const handleKeyPressTags = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && tagsInputValue.trim() !== "") {
+      e.preventDefault();
       setTags([...tags, tagsInputValue]);
       setShowTagsInputValue("");
-      setShowTagsInput(false);
     }
   };
 
@@ -215,27 +212,19 @@ const CreateRecipeForm = () => {
 
         {/* Ingredients */}
         <div>
-          <div className="grid gap-3">
-            <p>Les ingrédients</p>
-            <div className="grid grid-cols-5 gap-4 items-center">
-              <button
-                type="button"
-                onClick={() => setShowIngredientsInput(true)}
-                className="text-primary col-span-1"
-              >
-                Ajouter +
-              </button>
-              {showIngredientsInput && (
-                <input
-                  type="text"
-                  value={ingredientsInputValue}
-                  onChange={(e) => setShowIngredientsInputValue(e.target.value)}
-                  onKeyPress={handleKeyPressIngredients}
-                  placeholder="Ajouter un ingrédient"
-                  className="h-10 p-3 col-span-4"
-                />
-              )}
-            </div>
+          <p>Les ingrédients</p>
+          <div className="flex flex-col items-start gap-1 mt-3">
+            <p className="text-xs ml-3">
+              Appuyez sur Entrée pour ajouter un ingrédient
+            </p>
+            <input
+              type="text"
+              value={ingredientsInputValue}
+              onChange={(e) => setShowIngredientsInputValue(e.target.value)}
+              onKeyPress={handleKeyPressIngredients}
+              placeholder="Ajouter un ingrédient"
+              className="h-10 p-3 w-full"
+            />
           </div>
 
           <ul className="mt-4 flex flex-wrap">
@@ -258,30 +247,20 @@ const CreateRecipeForm = () => {
 
         {/* Instructions */}
         <div>
-          <div className="grid gap-3">
-            <p>Les instructions</p>
+          <p>Les instructions</p>
+          <div className="flex flex-col items-start gap-1 mt-3">
+            <p className="text-xs ml-3">
+              Appuyez sur Entrée pour ajouter une étape
+            </p>
 
-            <div className="grid grid-cols-5 gap-4 items-center">
-              <button
-                type="button"
-                onClick={() => setShowInstructionsInput(true)}
-                className="text-primary col-span-1"
-              >
-                + Ajouter
-              </button>
-              {showInstructionsInput && (
-                <input
-                  type="text"
-                  value={instructionsInputValue}
-                  onChange={(e) =>
-                    setShowInstructionsInputValue(e.target.value)
-                  }
-                  onKeyPress={handleKeyPressInstructions}
-                  placeholder="Ajoutez une instruction / étape de la recette"
-                  className="h-10 p-3 col-span-4"
-                />
-              )}
-            </div>
+            <input
+              type="text"
+              value={instructionsInputValue}
+              onChange={(e) => setShowInstructionsInputValue(e.target.value)}
+              onKeyPress={handleKeyPressInstructions}
+              placeholder="Ajoutez une instruction / étape de la recette"
+              className="h-10 p-3 w-full"
+            />
           </div>
 
           <ul className="mt-4">
@@ -390,28 +369,20 @@ const CreateRecipeForm = () => {
 
         {/* Tags */}
         <div>
-          <div className="grid gap-3">
-            <p>Ajoutez des tags !</p>
+          <p>Ajoutez des tags !</p>
+          <div className="flex flex-col items-start gap-1 mt-3">
+            <p className="text-xs ml-3">
+              Appuyez sur Entrée pour ajouter un tag
+            </p>
 
-            <div className="grid grid-cols-5 gap-4 items-center">
-              <button
-                type="button"
-                onClick={() => setShowTagsInput(true)}
-                className="text-primary col-span-1"
-              >
-                + Ajouter
-              </button>
-              {showTagsInput && (
-                <input
-                  type="text"
-                  value={tagsInputValue}
-                  onChange={(e) => setShowTagsInputValue(e.target.value)}
-                  onKeyPress={handleKeyPressTags}
-                  placeholder="Ajoutez un tag"
-                  className="h-10 p-3 col-span-4"
-                />
-              )}
-            </div>
+            <input
+              type="text"
+              value={tagsInputValue}
+              onChange={(e) => setShowTagsInputValue(e.target.value)}
+              onKeyPress={handleKeyPressTags}
+              placeholder="Ajoutez un tag"
+              className="h-10 p-3 w-full"
+            />
           </div>
 
           <ul className="mt-4 flex flex-wrap">
