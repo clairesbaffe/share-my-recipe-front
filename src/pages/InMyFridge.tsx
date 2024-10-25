@@ -39,11 +39,11 @@ const InMyFridge = () => {
         setCurrentPage(pageNumber);
         if (fetchedRecipes.length === 20) {
           setHasNextPage(true);
-        }
-      } else {
-        setHasNextPage(false);
-        if (currentPage === pageNumber) {
-          setCurrentPage(1);
+        } else {
+          setHasNextPage(false);
+          if (currentPage === pageNumber) {
+            setCurrentPage(1);
+          }
         }
       }
     }
@@ -104,7 +104,7 @@ const InMyFridge = () => {
         </p>
       )}
 
-      { recipes && recipes.length > 0 && (
+      {recipes && recipes.length > 0 && (
         <div>
           <div>
             <div className="flex w-full items-center mt-8">

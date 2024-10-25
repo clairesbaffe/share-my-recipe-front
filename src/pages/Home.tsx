@@ -56,13 +56,13 @@ const Home = () => {
         window.history.pushState({}, "", url.toString());
         window.scrollTo(0, 0);
         setCurrentPage(pageNumber);
-        if (fetchedRecipes.length === 20) {
+        if (fetchedRecipes.length >= 20) {
           setHasNextPage(true);
-        }
-      } else {
-        setHasNextPage(false);
-        if (currentPage === pageNumber) {
-          setCurrentPage(1);
+        } else {
+          setHasNextPage(false);
+          if (currentPage === pageNumber) {
+            setCurrentPage(1);
+          }
         }
       }
     }
@@ -94,8 +94,8 @@ const Home = () => {
       <p className="mb-8 mx-20 flex flex-col gap-3">
         <p>
           Vous cherchez des idées de repas simples et savoureuses ? Vous êtes au
-          bon endroit ! Share My Recipe est une communauté chaleureuse dédiée
-          à tous les passionnés de cuisine, qu'ils soient débutants ou chefs en
+          bon endroit ! Share My Recipe est une communauté chaleureuse dédiée à
+          tous les passionnés de cuisine, qu'ils soient débutants ou chefs en
           herbe.
         </p>
         <p>

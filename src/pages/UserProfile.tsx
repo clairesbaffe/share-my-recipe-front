@@ -136,11 +136,11 @@ const UserProfile = () => {
         setCurrentPage(pageNumber);
         if (fetchedRecipes.length === 20) {
           setHasNextPage(true);
-        }
-      } else {
-        setHasNextPage(false);
-        if (currentPage === pageNumber) {
-          setCurrentPage(1);
+        } else {
+          setHasNextPage(false);
+          if (currentPage === pageNumber) {
+            setCurrentPage(1);
+          }
         }
       }
     }
