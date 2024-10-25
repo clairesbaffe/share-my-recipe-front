@@ -1,4 +1,4 @@
-# share-my-recipe-back
+# share-my-recipe-front
 Recipe sharing app
 
 ## Start app
