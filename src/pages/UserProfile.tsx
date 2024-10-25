@@ -151,7 +151,7 @@ const UserProfile = () => {
     window.scrollTo(0, 0);
   };
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !id) {
     navigate("/login");
     return null;
   }
