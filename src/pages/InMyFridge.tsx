@@ -64,6 +64,7 @@ const InMyFridge = () => {
 
       const fetchedRecipes = await getRecipeByIngredients(chipsString, 1);
       setErrorMessage("");
+      setSearchMessage("");
 
       if (fetchedRecipes.length === 0) {
         setHasNextPage(false);
@@ -72,11 +73,9 @@ const InMyFridge = () => {
       } else if (fetchedRecipes.length === 20) {
         setHasNextPage(true);
         setRecipes(fetchedRecipes);
-        setSearchMessage("");
       } else {
         setHasNextPage(false);
         setRecipes(fetchedRecipes);
-        setSearchMessage("");
       }
 
       setLoading(false);
@@ -105,32 +104,35 @@ const InMyFridge = () => {
         </p>
       )}
 
-      {recipes && (
+      { recipes && recipes.length > 0 && (
         <div>
-          <div className="flex w-full items-center mt-8">
-            <hr className="border-primary m-4 w-full" />
-            <p className="text-primary font-artifika min-w-max">
-              Nous vous proposons
-            </p>
-            <hr className="border-primary m-4 w-full" />
+          <div>
+            <div className="flex w-full items-center mt-8">
+              <hr className="border-primary m-4 w-full" />
+              <p className="text-primary font-artifika min-w-max">
+                Nous vous proposons
+              </p>
+              <hr className="border-primary m-4 w-full" />
+            </div>
+            <div className="grid grid-cols-4 gap-8 m-12">
+              {recipes.map((recipe: any, index: number) => (
+                <div
+                  className="flex flex-col h-full transition-transform transform hover:scale-105 shadow-lg border rounded-lg overflow-hidden hover:cursor-pointer"
+                  key={index}
+                  onClick={() => handleCardClick(recipe.id)}
+                >
+                  <RecipeCard recipe={recipe} />
+                </div>
+              ))}
+            </div>
+
+            {/* pagination */}
+            <Pagination
+              currentPage={currentPage}
+              hasNextPage={hasNextPage}
+              onPageChange={handlePageChange}
+            />
           </div>
-          <div className="grid grid-cols-4 gap-8 m-12">
-            {recipes.map((recipe: any, index: number) => (
-              <div
-                className="flex flex-col h-full transition-transform transform hover:scale-105 shadow-lg border rounded-lg overflow-hidden hover:cursor-pointer"
-                key={index}
-                onClick={() => handleCardClick(recipe.id)}
-              >
-                <RecipeCard recipe={recipe} />
-              </div>
-            ))}
-          </div>
-          {/* pagination */}
-          <Pagination
-            currentPage={currentPage}
-            hasNextPage={hasNextPage}
-            onPageChange={handlePageChange}
-          />
         </div>
       )}
     </div>
