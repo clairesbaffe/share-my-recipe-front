@@ -172,23 +172,15 @@ const UserProfile = () => {
             alt="Avatar"
             className="rounded-full w-32 h-32 mb-5"
           />
-          {isConnectedUser ? (
-            <div className="bg-primary-light p-5 rounded-lg w-1/3">
-              <h3 className="font-artifika text-xl font-bold text-center mb-4 text-gray-800">
-                {userData.user.username}
-              </h3>
-            </div>
-          ) : (
-            <div className="bg-primary-light p-5 rounded-lg w-1/3">
-              <h3 className="font-artifika text-xl font-bold text-center mb-4 text-gray-800">
-                {userData.username}
-              </h3>
-              <p className="font-artifika text-center mb-2">
-                Date de création du profil :{" "}
-                {new Date(userData.creationDate).toLocaleDateString()}
-              </p>
-            </div>
-          )}
+          <div className="bg-primary-light p-5 rounded-lg w-1/3">
+            <h3 className="font-artifika text-xl font-bold text-center mb-4 text-gray-800">
+              {userData.username}
+            </h3>
+            <p className="font-artifika text-center mb-2">
+              Date de création du profil :{" "}
+              {new Date(userData.creationDate).toLocaleDateString()}
+            </p>
+          </div>
 
           {isConnectedUser && (
             <div className="bg-primary-light p-5 rounded-lg w-1/3 mt-5">
