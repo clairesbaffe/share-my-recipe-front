@@ -203,7 +203,7 @@ const UserProfile = () => {
             </div>
           )}
           {loading && <LoadingComponent />}
-          {recipes && (
+          {recipes && recipes.length > 0 && (
             <div>
               <div className="flex w-full items-center mt-8">
                 <hr className="border-primary m-4 w-full" />
