@@ -142,8 +142,8 @@ const RecipeContent = ({
             </h2>
             {recipe.recette.instructions.map(
               (instruction: any, index: number) => (
-                <div className="flex flex-col" key={index}>
-                  <p className="font-secondary">{instruction}</p>
+                <div className="flex flex-col items-start" key={index}>
+                  <p className="font-secondary">Étape {index + 1} : {instruction}</p>
                 </div>
               )
             )}
