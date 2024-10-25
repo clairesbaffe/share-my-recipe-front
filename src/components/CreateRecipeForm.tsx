@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { GiCookingPot } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
 import { createRecipe } from "../services/RecipeService";
@@ -33,43 +33,21 @@ const CreateRecipeForm = () => {
   const minutesInputRef = useRef(null);
   const personsInputRef = useRef(null);
 
-  // prevent changing input number value on scroll
-  useEffect(() => {
-    const hoursInput: any = hoursInputRef.current;
-    const minutesInput: any = hoursInputRef.current;
-    const personsInput: any = hoursInputRef.current;
+  const handleWheel = (e: any) => e.preventDefault();
 
-    const handleHoursWheel = (e: any) => {
-      if (document.activeElement === hoursInput) {
-        e.preventDefault();
-      }
-    };
-    hoursInput.addEventListener("wheel", handleHoursWheel, { passive: false });
+  const enableWheelBlock = (inputRef: any) => {
+    if (inputRef.current) {
+      inputRef.current.addEventListener("wheel", handleWheel, {
+        passive: false,
+      });
+    }
+  };
 
-    const handleMinutesWheel = (e: any) => {
-      if (document.activeElement === minutesInput) {
-        e.preventDefault();
-      }
-    };
-    minutesInput.addEventListener("wheel", handleMinutesWheel, {
-      passive: false,
-    });
-
-    const handlePersonsWheel = (e: any) => {
-      if (document.activeElement === personsInput) {
-        e.preventDefault();
-      }
-    };
-    personsInput.addEventListener("wheel", handlePersonsWheel, {
-      passive: false,
-    });
-
-    return () => {
-      hoursInput.removeEventListener("wheel", handleHoursWheel);
-      minutesInput.removeEventListener("wheel", handleMinutesWheel);
-      personsInput.removeEventListener("wheel", handlePersonsWheel);
-    };
-  }, []);
+  const disableWheelBlock = (inputRef: any) => {
+    if (inputRef.current) {
+      inputRef.current.removeEventListener("wheel", handleWheel);
+    }
+  };
 
   // manage ingredients, intructions and tags input
   const handleKeyPressIngredients = (
@@ -327,10 +305,11 @@ const CreateRecipeForm = () => {
                   Number(e.target.value) >= 0 ? Number(e.target.value) : 0
                 )
               }
-              onWheel={(e) => e.preventDefault()}
               min={0}
               placeholder="Heures"
               className="w-16 h-10 p-2"
+              onFocus={() => enableWheelBlock(hoursInputRef)}
+              onBlur={() => disableWheelBlock(hoursInputRef)}
             />
             h
             <input
@@ -348,6 +327,8 @@ const CreateRecipeForm = () => {
               max={59}
               placeholder="Minutes"
               className="w-16 h-10 p-2"
+              onFocus={() => enableWheelBlock(minutesInputRef)}
+              onBlur={() => disableWheelBlock(minutesInputRef)}
             />
             mn
           </div>
@@ -364,6 +345,8 @@ const CreateRecipeForm = () => {
             min={0}
             onChange={(e) => setNbPersons(Number(e.target.value))}
             className="w-1/4 h-10 p-3"
+            onFocus={() => enableWheelBlock(hoursInputRef)}
+            onBlur={() => disableWheelBlock(hoursInputRef)}
           />
         </div>
 
