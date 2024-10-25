@@ -7,7 +7,7 @@ const RecipeCard = ({ recipe }: { recipe: any }) => {
   const totalMinutes = recipe.preparationTime;
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
-  
+
   if (totalMinutes >= 60) {
     preparationTime = minutes === 0 ? `${hours} h` : `${hours} h ${minutes} mn`;
   } else {
@@ -32,16 +32,18 @@ const RecipeCard = ({ recipe }: { recipe: any }) => {
           <div className="font-bold text-xl">{recipe.title}</div>
         </div>
         <div className="space-x-2">
-          {recipe.nbPersons && (
+          {recipe.nbPersons > 0 && (
             <span className="inline-flex items-center bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
               <Utensils className="h-5 mr-1" />
               {recipe.nbPersons}
             </span>
           )}
-          <span className="inline-flex items-center bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
-            <Timer className="h-5 mr-1" />
-            {preparationTime}
-          </span>
+          {preparationTime && (
+            <span className="inline-flex items-center bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
+              <Timer className="h-5 mr-1" />
+              {preparationTime}
+            </span>
+          )}
         </div>
         <div className="flex justify-center items-center px-6 py-4">
           {Array.from({ length: recipe.difficulty }, (_, index) => (

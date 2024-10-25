@@ -55,13 +55,13 @@ const RecipeContent = ({
           <div className="flex flex-col">
             <div className="flex justify-around mb-5">
               <h1 className="text-2xl font-bold text-center">{recipe.title}</h1>
-              {recipe.preparationTime && (
+              {preparationTime && (
                 <span className="inline-flex items-center gap-1">
                   <Timer className="h-5 mr-1" />
                   {preparationTime}
                 </span>
               )}
-              {recipe.nbPersons && (
+              {recipe.nbPersons > 0 && (
                 <span className="inline-flex items-center gap-1">
                   <Utensils className="h-5 mr-1" />
                   {recipe.nbPersons} personnes

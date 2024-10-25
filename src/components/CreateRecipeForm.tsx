@@ -46,27 +46,30 @@ const CreateRecipeForm = () => {
         e.preventDefault();
       }
     };
-    hoursInput.addEventListener('wheel', handleHoursWheel, { passive: false });
+    hoursInput.addEventListener("wheel", handleHoursWheel, { passive: false });
 
     const handleMinutesWheel = (e: any) => {
       if (document.activeElement === minutesInput) {
         e.preventDefault();
       }
     };
-    minutesInput.addEventListener('wheel', handleMinutesWheel, { passive: false });
+    minutesInput.addEventListener("wheel", handleMinutesWheel, {
+      passive: false,
+    });
 
     const handlePersonsWheel = (e: any) => {
       if (document.activeElement === personsInput) {
         e.preventDefault();
       }
     };
-    personsInput.addEventListener('wheel', handlePersonsWheel, { passive: false });
-
+    personsInput.addEventListener("wheel", handlePersonsWheel, {
+      passive: false,
+    });
 
     return () => {
-      hoursInput.removeEventListener('wheel', handleHoursWheel);
-      minutesInput.removeEventListener('wheel', handleMinutesWheel);
-      personsInput.removeEventListener('wheel', handlePersonsWheel);
+      hoursInput.removeEventListener("wheel", handleHoursWheel);
+      minutesInput.removeEventListener("wheel", handleMinutesWheel);
+      personsInput.removeEventListener("wheel", handlePersonsWheel);
     };
   }, []);
 
@@ -349,7 +352,7 @@ const CreateRecipeForm = () => {
             />
             h
             <input
-            ref={minutesInputRef}
+              ref={minutesInputRef}
               type="number"
               value={minutes}
               onChange={(e) =>
@@ -372,10 +375,11 @@ const CreateRecipeForm = () => {
         <div className="flex flex-col items-center gap-3">
           <label htmlFor="nbPersons">Pour combien de personnes ?</label>
           <input
-          ref={personsInputRef}
+            ref={personsInputRef}
             type="number"
+            value={nbPersons}
             name="nbPersons"
-            min={1}
+            min={0}
             onChange={(e) => setNbPersons(Number(e.target.value))}
             className="w-1/4 h-10 p-3"
           />
