@@ -32,8 +32,8 @@ const RateRecipeCard = ({ recipeId }: { recipeId: number }) => {
       }
     };
 
-    fetchUserRating();
-  }, [recipeId]);
+    if(isAuthenticated) fetchUserRating();
+  }, [recipeId, isAuthenticated]);
 
   const handleSubmit = async () => {
     setMessage("");
